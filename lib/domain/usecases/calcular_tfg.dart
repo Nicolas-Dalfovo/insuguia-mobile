@@ -1,6 +1,9 @@
 import 'dart:math';
 
+// Caso de uso para cálculo de TFG (Taxa de Filtração Glomerular)
+// Utiliza a fórmula CKD-EPI 2021
 class CalcularTFG {
+  // Calcula a TFG usando a fórmula CKD-EPI 2021
   double execute({
     required double creatinina,
     required int idade,
@@ -25,6 +28,7 @@ class CalcularTFG {
     return double.parse(tfg.toStringAsFixed(2));
   }
 
+  // Classifica a função renal conforme estágios G1-G5
   String classificarTFG(double tfg) {
     if (tfg >= 90) {
       return 'Normal ou aumentada (G1)';
@@ -41,10 +45,12 @@ class CalcularTFG {
     }
   }
 
+  // Verifica se a função renal requer ajuste de dose de insulina
   bool requerAjusteInsulina(double tfg) {
     return tfg < 60;
   }
 
+  // Retorna orientação de ajuste de dose conforme TFG
   String orientacaoAjuste(double tfg) {
     if (tfg >= 60) {
       return 'Função renal normal. Sem necessidade de ajuste de dose.';

@@ -2,8 +2,9 @@ import '../entities/dados_clinicos.dart';
 import '../entities/paciente.dart';
 import '../entities/prescricao.dart';
 
-
+// Caso de uso para gerar a prescrição completa formatada
 class GerarPrescricao {
+  // Gera o texto completo da prescrição pronto para cópia
   String execute({
     required Paciente paciente,
     required DadosClinicos dadosClinicos,
@@ -140,6 +141,7 @@ class GerarPrescricao {
     return buffer.toString();
   }
 
+  // Gera orientações de dieta conforme o tipo
   String gerarOrientacoesDieta(TipoDieta tipoDieta) {
     switch (tipoDieta) {
       case TipoDieta.oral:
@@ -159,6 +161,7 @@ class GerarPrescricao {
     }
   }
 
+  // Gera protocolo de monitorização glicêmica
   String gerarOrientacoesMonitorizacao(TipoDieta tipoDieta) {
     if (tipoDieta == TipoDieta.oral) {
       return '   Glicemia capilar:\n'
@@ -172,6 +175,7 @@ class GerarPrescricao {
     }
   }
 
+  // Gera protocolo de prevenção e tratamento de hipoglicemia
   String gerarOrientacoesHipoglicemia() {
     return '   Se glicemia capilar < 70 mg/dL:\n'
         '\n'

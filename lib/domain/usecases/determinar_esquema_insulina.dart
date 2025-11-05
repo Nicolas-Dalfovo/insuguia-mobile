@@ -1,6 +1,9 @@
 import '../entities/dados_clinicos.dart';
 
+// Caso de uso para determinar o esquema de insulinoterapia adequado
+// Esquemas: correção isolada, basal-plus ou basal-bolus
 class DeterminarEsquemaInsulina {
+  // Determina o esquema com base em glicemias, tipo de diabetes e uso prévio
   EsquemaInsulina execute({
     required DadosClinicos dadosClinicos,
     required List<double> glicemiasRecentes,
@@ -45,6 +48,7 @@ class DeterminarEsquemaInsulina {
     return EsquemaInsulina.correcaoIsolada;
   }
 
+  // Retorna a justificativa do esquema escolhido
   String obterJustificativa({
     required DadosClinicos dadosClinicos,
     required List<double> glicemiasRecentes,

@@ -1,3 +1,4 @@
+// Constantes gerais da aplicação
 class AppConstants {
   static const String appName = 'InsuGuia Mobile';
   static const String appVersion = '1.0.0';
@@ -21,7 +22,9 @@ class AppConstants {
       'consulte as diretrizes específicas da SBD.';
 }
 
+// Constantes clínicas baseadas nas diretrizes SBD 2025
 class ClinicalConstants {
+  // Limites de validação para dados antropométricos
   static const double pesoMinimo = 30.0;
   static const double pesoMaximo = 300.0;
 
@@ -37,11 +40,13 @@ class ClinicalConstants {
   static const double creatininaMinima = 0.3;
   static const double creatininaMaxima = 15.0;
 
+  // Valores de referência para glicemia
   static const double hiperglicemiaHospitalar = 140.0;
   static const double hiperglicemiaPersistente = 180.0;
   static const double hiperglicemiaSevera = 250.0;
   static const double hipoglicemia = 70.0;
 
+  // Classificação de IMC
   static const double imcBaixoPeso = 18.5;
   static const double imcSobrePeso = 25.0;
   static const double imcObesidade = 30.0;
@@ -49,18 +54,22 @@ class ClinicalConstants {
   static const double imcSensivel = 19.0;
   static const double imcResistente = 33.0;
 
+  // Doses de insulina por kg de peso
   static const double dtdMinimaPorKg = 0.2;
   static const double dtdMaximaPorKg = 0.6;
 
+  // Doses basais conforme sensibilidade
   static const double basalSensivelPorKg = 0.1;
   static const double basalUsualPorKg = 0.2;
   static const double basalResistentePorKg = 0.3;
 
+  // Fatores de sensibilidade para cálculo de correção
   static const int fatorSensibilidadeSensivel = 80;
   static const int fatorSensibilidadeUsual = 40;
   static const int fatorSensibilidadeResistente = 20;
 }
 
+// Mensagens de validação e alertas clínicos
 class Messages {
   static const String erroValidacaoPeso =
       'Peso deve estar entre 30 e 300 kg';

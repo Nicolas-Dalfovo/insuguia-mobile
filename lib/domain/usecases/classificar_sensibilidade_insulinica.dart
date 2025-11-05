@@ -1,7 +1,10 @@
 import '../entities/dados_clinicos.dart';
 import '../entities/paciente.dart';
 
+// Caso de uso para classificar a sensibilidade à insulina do paciente
+// Categorias: sensível, usual ou resistente
 class ClassificarSensibilidadeInsulinica {
+  // Classifica a sensibilidade com base em IMC, idade, TFG e uso de corticoide
   SensibilidadeInsulinica execute({
     required Paciente paciente,
     required DadosClinicos dadosClinicos,
@@ -54,6 +57,7 @@ class ClassificarSensibilidadeInsulinica {
     return SensibilidadeInsulinica.usual;
   }
 
+  // Retorna a justificativa da classificação com os critérios utilizados
   String obterJustificativa({
     required Paciente paciente,
     required DadosClinicos dadosClinicos,

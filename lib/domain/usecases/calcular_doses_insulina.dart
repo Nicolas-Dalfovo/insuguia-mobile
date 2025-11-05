@@ -2,7 +2,10 @@ import '../entities/dados_clinicos.dart';
 import '../entities/paciente.dart';
 import '../entities/prescricao.dart';
 
+// Caso de uso para calcular as doses de insulina personalizadas
+// Calcula DTD, basal, bolus e escala de correção
 class CalcularDosesInsulina {
+  // Calcula todas as doses baseado em peso, sensibilidade e esquema
   ResultadoCalculoDoses execute({
     required Paciente paciente,
     required SensibilidadeInsulinica sensibilidade,
@@ -36,6 +39,7 @@ class CalcularDosesInsulina {
     );
   }
 
+  // Calcula a Dose Total Diária conforme sensibilidade
   double _calcularDTD(double peso, SensibilidadeInsulinica sensibilidade) {
     double fatorPorKg;
 
@@ -54,10 +58,12 @@ class CalcularDosesInsulina {
     return peso * fatorPorKg;
   }
 
+  // Calcula a dose basal (50% da DTD)
   double _calcularDoseBasal(double dtd) {
     return dtd * 0.5;
   }
 
+  // Calcula a dose de bolus por refeição conforme tipo de dieta
   double _calcularDoseBolus(double dtd, TipoDieta tipoDieta) {
     final doseBolusTotalDiaria = dtd * 0.5;
 
@@ -71,6 +77,7 @@ class CalcularDosesInsulina {
     return 0;
   }
 
+  // Define os horários de aplicação da insulina basal (NPH 3x ou glargina 1x)
   List<HorarioInsulina> _definirHorariosBasal(
     double doseBasal,
     TipoInsulinaBasal tipoInsulina,
@@ -90,6 +97,7 @@ class CalcularDosesInsulina {
     }
   }
 
+  // Gera a escala de correção personalizada conforme sensibilidade
   List<EscalaCorrecao> _gerarEscalaCorrecao(
       SensibilidadeInsulinica sensibilidade) {
     Map<String, List<double>> escalasPorSensibilidade = {
@@ -126,11 +134,13 @@ class CalcularDosesInsulina {
     ];
   }
 
+  // Arredonda a dose para valores práticos (múltiplos de 0.5 UI)
   double _arredondarDose(double dose) {
     return (dose * 2).round() / 2;
   }
 }
 
+// Classe que encapsula o resultado do cálculo de doses
 class ResultadoCalculoDoses {
   final double doseTotalDiaria;
   final double doseBasal;
