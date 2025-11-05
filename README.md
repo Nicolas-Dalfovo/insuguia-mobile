@@ -84,4 +84,4 @@ Este é um projeto acadêmico e não deve ser utilizado para decisões clínicas
 
 ---
 
-*Desenvolvido pelo Curso de Sistemas de Informação - 2025*
+*Desenvolvido pelo aluno Nicolas Marques Dalfovo - 2025*
