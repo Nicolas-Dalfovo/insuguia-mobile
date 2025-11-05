@@ -45,7 +45,7 @@ O aplicativo foi desenvolvido utilizando a arquitetura **Clean Architecture**, s
 1.  **Clone o repositório:**
 
     ```bash
-    git clone <https://github.com/Nicolas-Dalfovo/insuguia-mobile>
+    git clone https://github.com/Nicolas-Dalfovo/insuguia-mobile
     cd insuguia_app
     ```
 
