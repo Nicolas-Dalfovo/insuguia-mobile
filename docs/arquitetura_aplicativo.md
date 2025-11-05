@@ -263,13 +263,3 @@ lib/
     ├── screens/
     └── widgets/
 ```
-
-## Próximos Passos
-
-1. Configuração do projeto Flutter
-2. Implementação das entidades do domínio
-3. Criação do banco de dados local
-4. Implementação dos casos de uso clínicos
-5. Desenvolvimento das telas principais
-6. Integração e testes
-7. Documentação final
