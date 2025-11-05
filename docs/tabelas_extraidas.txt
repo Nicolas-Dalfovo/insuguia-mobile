@@ -1,0 +1,80 @@
+
+================================================================================
+TABELA 1
+================================================================================
+TABELA 1: CONDUTA PARA CONTROLE GLICÊMICO NAS DIVERSAS FAIXAS GLICÊMICAS NO PACIENTE INTERNADO:
+Glicemia descoberta ao acaso	Observação	Ação
+<140
+mg/dL	Sem diabetes mellitus (DM)
+ou fatores de risco. (Ver Quadro 1)	
+Sem necessidade de monitoramento de glicemia capilar (MGC)
+
+140 a 180
+mg/dL	Ou presença de fatores de risco
+ou DM.	
+MGC
+Insulina em escala de correção (IEC) para hiperglicemias eventuais (Menos de 1 episódio ao dia acima  de 180mg/dL e abaixo 250mg/dL). Tabelas 2 e 4
+
+180 a 200 mg/dL	Sem uso domiciliar de insulina.	
+MGC
+Insulinoterapia basal associada à IEC pré-prandial. Tabelas 2 e 4.; ou
+iDPP-4 associado à IEC pré-prandial;
+
+>200 a <250 mg/dL	Ou uso domiciliar de insulina até 0,6 UI/kg.	
+MGC
+Insulinoterapia basal associada à IEC pré-prandial. - Tabelas 2 e 4
+
+>200 a <250 mg/dL	Ou história prévia de DM1, LADA, DM secundário à pancreatectomia ou uso domiciliar de doses de insulina acima de 0,6 UI/kg.	
+MGC
+Insulinoterapia basal-bolus
+
+Hiperglicemia associada ao Glicocorticóide (GC).	
+MGC
+Insulinoterapia basal-bolus e/ou uso de insulina NPH adicional pela manhã, proporcional à dose de GC
+
+
+================================================================================
+TABELA 2
+================================================================================
+TABELA 2: ESCOLHA DO ESQUEMA DE INSULINIZAÇÃO NO HOSPITAL PARA PACIENTES NÃO-CRÍTICOS:
+Esquema	Indicação	Grau de recomendação  e nivel de evidencia
+Escala de Correção Isolada
+(Apenas insulina regular ou análogo de insulina rápida ou ultrarrápida pré prandial, de acordo com a glicemia - Quadro 2)	
+No máximo, 1 glicemia > 180 mg/dL ao dia;  e
+Nenhuma glicemia acima de 250mg/dL; e
+Sem uso domiciliar de insulina.
+	IIb	B
+Basal com Correção
+(Basal-Plus) (insulina basal + Escala de correção - Quadro 2)	
+Hiperglicemias entre 180 e 250mg/dl; e/ou
+Dose domiciliar de insulina  <=0,6 UI/kg/dia.
+	IIa	B
+Basal-bolus
+(insulina basal + insulina bolus em múltiplas doses) - Quadro 2)	
+Hiperglicemias >250mg/dL; e/ou
+DM1, LADA,  DM secundário à pancreatectomia; e/ou
+Dose domiciliar de insulina  >0,6 UI/kg/dia.
+	I	B
+
+
+================================================================================
+TABELA 3
+================================================================================
+TABELA 3: SUGESTÃO DE ESCALA DE CORREÇÃO DE GLICEMIAS:
+Glicemia Capilar	Sensível (FS 80)1**	Usual (FS 40)2	Resistente (FS 20)3
+141-180 mg/dL	0	1 UI	2 UI
+181-220 mg/dL	1 UI	2 UI	4 UI
+221-260 mg/dL	1 UI	3 UI	6 UI
+261-300 mg/dL	2 UI	4 UI	8 UI
+301-340 mg/dL	2 UI	5 UI	10 UI
+341-380 mg/dL	3 UI	6 UI	12 UI
+381-420 mg/dL	3 UI	7 UI	14 UI
+>420 mg/dL	4 UI	8 UI	16 UI
+*Insulinas de ação rápida ou análogos de ação rápida ou ultrarrápida. Em caso de uso de dieta enteral contínua ou parenteral, a correção pode ser realizada a cada 4-6 horas.
+**FS - Fator de sensibilidade à insulina. Cálculos realizados para atingir uma meta entre 100 e 140mg/dL.
+(1) Sensível: Idosos, índice de massa corporal (IMC)< 19kg/m², frágeis e/ou com insuficiência renal, hepática ou cardíaca.
+(2) Usual: IMC de 19 a 33kg/m², sem sinais de resistência insulínica ou uso de glicocorticoide.
+(3) Resistente: Pacientes com IMC acima de 33kg/m², com sinais de resistência insulínica, em uso de glicocorticoide ou glicemias persistentemente aumentadas.
+
+Figura 2: Escolha do tratamento inicial da hiperglicemia hospitalar
+
