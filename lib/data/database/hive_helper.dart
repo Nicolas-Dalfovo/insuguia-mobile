@@ -19,7 +19,9 @@ class HiveHelper {
     
     try {
       print('DEBUG: Inicializando Hive...');
-      await Hive.initFlutter();
+      // Usa um subDir fixo para garantir persistência independente da porta
+      await Hive.initFlutter('insuguia_db');
+      print('DEBUG: Hive inicializado com subDir fixo: insuguia_db');
       
       print('DEBUG: Registrando adaptadores...');
       // Registra os adaptadores
@@ -57,20 +59,22 @@ class HiveHelper {
   }
 
   // Abre uma box (equivalente a uma tabela)
+  // Usa nome prefixado para garantir isolamento do app
   Future<Box<T>> openBox<T>(String boxName) async {
+    final fullBoxName = 'insuguia_$boxName';
     if (!_initialized) {
       print('DEBUG: Hive não inicializado, inicializando...');
       await initialize();
     }
     
-    if (Hive.isBoxOpen(boxName)) {
-      print('DEBUG: Box $boxName já está aberta');
-      return Hive.box<T>(boxName);
+    if (Hive.isBoxOpen(fullBoxName)) {
+      print('DEBUG: Box $fullBoxName já está aberta');
+      return Hive.box<T>(fullBoxName);
     }
     
-    print('DEBUG: Abrindo box $boxName...');
-    final box = await Hive.openBox<T>(boxName);
-    print('DEBUG: Box $boxName aberta com ${box.length} itens');
+    print('DEBUG: Abrindo box $fullBoxName...');
+    final box = await Hive.openBox<T>(fullBoxName);
+    print('DEBUG: Box $fullBoxName aberta com ${box.length} itens');
     return box;
   }
 

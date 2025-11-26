@@ -1,6 +1,6 @@
-# Problema de Persistência de Dados no Flutter Web
+# Persistência de Dados no Flutter Web
 
-## Descrição do Problema
+## Problema Original (RESOLVIDO)
 
 Ao executar o aplicativo InsuGuia Mobile em modo debug no navegador Chrome, os dados salvos no Hive (banco de dados local) não persistem entre sessões. Quando o aplicativo é fechado e reaberto, todos os pacientes e prescrições cadastrados desaparecem.
 
@@ -14,9 +14,31 @@ O Flutter, em modo debug, executa o Chrome com uma **porta aleatória** a cada e
 
 Como as portas são diferentes, o navegador trata como origens diferentes, e os dados não são compartilhados.
 
-## Solução
+## Solução Implementada
 
-Executar o aplicativo com uma **porta fixa** garante que a origem seja sempre a mesma, permitindo que o IndexedDB persista os dados entre sessões.
+O problema foi resolvido configurando o Hive para usar um **subdiretório fixo** ao invés de depender da porta. Agora o aplicativo persiste dados automaticamente, independente da porta usada.
+
+### Como funciona
+
+O método `Hive.initFlutter()` aceita um parâmetro opcional que define o nome do subdiretório onde os dados serão armazenados:
+
+```dart
+await Hive.initFlutter('insuguia_db');
+```
+
+Além disso, os nomes das boxes são prefixados com `insuguia_` para garantir isolamento:
+
+```dart
+final fullBoxName = 'insuguia_$boxName';
+```
+
+Com isso, o IndexedDB armazena os dados em um local fixo, independente da porta:
+- `insuguia_db/insuguia_pacientes`
+- `insuguia_db/insuguia_prescricoes`
+
+### Solução Alternativa (Porta Fixa)
+
+Caso ainda queira usar porta fixa por outros motivos, o projeto também está configurado para isso:
 
 ### Opção 1: Configuração Automática (VS Code)
 
@@ -45,21 +67,36 @@ flutter run -d chrome --web-port 5555
 
 ## Verificação
 
-Para verificar se a solução está funcionando:
+Para verificar se a persistência está funcionando:
 
-1. Execute o aplicativo com porta fixa
+1. Execute o aplicativo (com qualquer porta ou sem especificar)
+   ```bash
+   flutter run -d chrome
+   ```
 2. Cadastre um paciente
 3. Feche o navegador completamente
-4. Execute o aplicativo novamente (com a mesma porta)
+4. Execute o aplicativo novamente (pode ser com porta diferente)
 5. Acesse "Pacientes Cadastrados"
 6. O paciente deve estar lá!
 
+### Teste com portas diferentes
+
+```bash
+# Primeira execução
+flutter run -d chrome --web-port 5555
+# Cadastre um paciente
+
+# Segunda execução (porta diferente)
+flutter run -d chrome --web-port 8080
+# O paciente ainda estará lá!
+```
+
 ## Observações
 
-- Este problema **só ocorre em modo debug**
-- Em **produção** (flutter build web), os dados persistem normalmente
-- A porta 5555 foi escolhida arbitrariamente, você pode usar qualquer porta disponível
-- Se a porta 5555 já estiver em uso, escolha outra (ex: 8080, 3000, etc.)
+- A solução com subdiretório fixo funciona em **qualquer modo** (debug, profile, release)
+- Os dados persistem independente da porta usada
+- O nome `insuguia_db` garante isolamento de outros apps Flutter
+- Em **produção** (flutter build web), os dados persistem normalmente sem nenhuma configuração adicional
 
 ## Referências
 

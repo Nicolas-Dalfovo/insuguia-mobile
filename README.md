@@ -73,20 +73,12 @@ O aplicativo foi desenvolvido utilizando a arquitetura **Clean Architecture**, s
 
 3.  **Execute o aplicativo:**
 
-    **IMPORTANTE PARA WEB:** Para que os dados persistam no navegador, é necessário executar com uma porta fixa.
-
-    **Para Web (Opção 1 - VS Code - Recomendado):**
-    - O projeto já está configurado para usar a porta 5555 automaticamente
-    - Abra o projeto no VS Code
-    - Pressione F5 ou clique em "Run > Start Debugging"
-    - Os dados serão persistidos entre sessões
-
-    **Para Web (Opção 2 - Linha de comando):**
+    **Para Web:**
     ```bash
-    flutter run -d chrome --web-port 5555
+    flutter run -d chrome
     ```
     
-    **Nota:** Em modo debug, o Flutter executa o Chrome com porta aleatória, o que impede a persistência de dados. A porta fixa resolve isso.
+    **Nota:** O aplicativo agora persiste dados automaticamente, independente da porta usada. O Hive foi configurado para usar um subdiretório fixo (`insuguia_db`) que garante a persistência entre sessões.
 
     **Para Android/iOS:**
     ```bash
