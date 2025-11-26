@@ -41,10 +41,9 @@ class AppTheme {
     ),
     cardTheme: const CardThemeData(
       elevation: 2,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
+      shape: RoundedRectangleBorder(   borderRadius: BorderRadius.circular(12),
       ),
-      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
     ),
     inputDecorationTheme: InputDecorationTheme(
       filled: true,

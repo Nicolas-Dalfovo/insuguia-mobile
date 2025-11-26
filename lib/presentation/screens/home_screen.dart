@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../core/constants/app_constants.dart';
 import 'aviso_legal_screen.dart';
+import 'lista_pacientes_screen.dart';
 
 
 class HomeScreen extends StatelessWidget {
@@ -73,11 +74,10 @@ class HomeScreen extends StatelessWidget {
               const SizedBox(height: 16),
               OutlinedButton.icon(
                 onPressed: () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text(
-                        'Funcionalidade em desenvolvimento',
-                      ),
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const ListaPacientesScreen(),
                     ),
                   );
                 },

@@ -5,34 +5,68 @@ import '../../domain/entities/paciente.dart';
 import '../../domain/usecases/calcular_imc.dart';
 import '../../domain/usecases/calcular_tfg.dart';
 import '../providers/paciente_provider.dart';
-import 'dados_clinicos_screen.dart';
 
-class CadastroPacienteScreen extends StatefulWidget {
-  const CadastroPacienteScreen({super.key});
+// Tela para editar dados de um paciente existente
+class EditarPacienteScreen extends StatefulWidget {
+  final Paciente paciente;
+
+  const EditarPacienteScreen({
+    super.key,
+    required this.paciente,
+  });
 
   @override
-  State<CadastroPacienteScreen> createState() => _CadastroPacienteScreenState();
+  State<EditarPacienteScreen> createState() => _EditarPacienteScreenState();
 }
 
-class _CadastroPacienteScreenState extends State<CadastroPacienteScreen> {
+class _EditarPacienteScreenState extends State<EditarPacienteScreen> {
   final _formKey = GlobalKey<FormState>();
   final _calcularIMC = CalcularIMC();
   final _calcularTFG = CalcularTFG();
 
-  final _nomeController = TextEditingController();
-  final _idadeController = TextEditingController();
-  final _pesoController = TextEditingController();
-  final _alturaController = TextEditingController();
-  final _creatininaController = TextEditingController();
-  final _localInternacaoController = TextEditingController();
+  late TextEditingController _nomeController;
+  late TextEditingController _idadeController;
+  late TextEditingController _pesoController;
+  late TextEditingController _alturaController;
+  late TextEditingController _creatininaController;
+  late TextEditingController _localInternacaoController;
 
-  String _sexo = 'Masculino';
-  bool _negroOuPardo = false;
+  late String _sexo;
+  late bool _negroOuPardo;
 
   double? _imc;
   String? _classificacaoIMC;
   double? _tfg;
   String? _classificacaoTFG;
+
+  @override
+  void initState() {
+    super.initState();
+    _nomeController = TextEditingController(text: widget.paciente.nome);
+    _idadeController =
+        TextEditingController(text: widget.paciente.idade.toString());
+    _pesoController =
+        TextEditingController(text: widget.paciente.peso.toString());
+    _alturaController =
+        TextEditingController(text: widget.paciente.altura.toString());
+    _creatininaController = TextEditingController(
+        text: widget.paciente.creatinina?.toString() ?? '');
+    _localInternacaoController =
+        TextEditingController(text: widget.paciente.localInternacao ?? '');
+
+    _sexo = widget.paciente.sexo;
+    _negroOuPardo = false;
+
+    _imc = widget.paciente.imc;
+    _tfg = widget.paciente.tfg;
+
+    if (_imc != null) {
+      _classificacaoIMC = _calcularIMC.classificarIMC(_imc!);
+    }
+    if (_tfg != null) {
+      _classificacaoTFG = _calcularTFG.classificarTFG(_tfg!);
+    }
+  }
 
   @override
   void dispose() {
@@ -77,9 +111,9 @@ class _CadastroPacienteScreenState extends State<CadastroPacienteScreen> {
     }
   }
 
-  void _proximaEtapa() async {
+  void _salvarAlteracoes() async {
     if (_formKey.currentState!.validate()) {
-      final paciente = Paciente(
+      final pacienteAtualizado = widget.paciente.copyWith(
         nome: _nomeController.text,
         sexo: _sexo,
         idade: int.parse(_idadeController.text),
@@ -91,27 +125,25 @@ class _CadastroPacienteScreenState extends State<CadastroPacienteScreen> {
         localInternacao: _localInternacaoController.text.isEmpty
             ? null
             : _localInternacaoController.text,
-        dataCadastro: DateTime.now(),
       );
 
-      // Salva o paciente no banco de dados
       try {
-        final id = await context.read<PacienteProvider>().salvarPaciente(paciente);
-        final pacienteSalvo = paciente.copyWith(id: id);
+        await context.read<PacienteProvider>().atualizarPaciente(pacienteAtualizado);
         
         if (mounted) {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => DadosClinicosScreen(paciente: pacienteSalvo),
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Paciente atualizado com sucesso'),
+              backgroundColor: Colors.green,
             ),
           );
+          Navigator.pop(context);
         }
       } catch (e) {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text('Erro ao salvar paciente: $e'),
+              content: Text('Erro ao atualizar paciente: $e'),
               backgroundColor: Colors.red,
             ),
           );
@@ -124,7 +156,14 @@ class _CadastroPacienteScreenState extends State<CadastroPacienteScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Cadastro do Paciente'),
+        title: const Text('Editar Paciente'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.save),
+            onPressed: _salvarAlteracoes,
+            tooltip: 'Salvar alterações',
+          ),
+        ],
       ),
       body: Form(
         key: _formKey,
@@ -140,7 +179,6 @@ class _CadastroPacienteScreenState extends State<CadastroPacienteScreen> {
               controller: _nomeController,
               decoration: const InputDecoration(
                 labelText: 'Nome do Paciente',
-                hintText: 'Nome completo',
                 prefixIcon: Icon(Icons.person),
               ),
               textCapitalization: TextCapitalization.words,
@@ -176,7 +214,6 @@ class _CadastroPacienteScreenState extends State<CadastroPacienteScreen> {
               controller: _idadeController,
               decoration: const InputDecoration(
                 labelText: 'Idade',
-                hintText: 'Em anos',
                 prefixIcon: Icon(Icons.cake),
                 suffixText: 'anos',
               ),
@@ -194,20 +231,6 @@ class _CadastroPacienteScreenState extends State<CadastroPacienteScreen> {
                 return null;
               },
             ),
-            const SizedBox(height: 16),
-            CheckboxListTile(
-              value: _negroOuPardo,
-              onChanged: (value) {
-                setState(() {
-                  _negroOuPardo = value ?? false;
-                  _calcularIndicadores();
-                });
-              },
-              title: const Text('Raça negra ou parda'),
-              subtitle: const Text('Para cálculo da TFG'),
-              controlAffinity: ListTileControlAffinity.leading,
-              contentPadding: EdgeInsets.zero,
-            ),
             const SizedBox(height: 24),
             Text(
               'Dados Antropométricos',
@@ -218,7 +241,6 @@ class _CadastroPacienteScreenState extends State<CadastroPacienteScreen> {
               controller: _pesoController,
               decoration: const InputDecoration(
                 labelText: 'Peso',
-                hintText: 'Em quilogramas',
                 prefixIcon: Icon(Icons.monitor_weight),
                 suffixText: 'kg',
               ),
@@ -244,7 +266,6 @@ class _CadastroPacienteScreenState extends State<CadastroPacienteScreen> {
               controller: _alturaController,
               decoration: const InputDecoration(
                 labelText: 'Altura',
-                hintText: 'Em centímetros',
                 prefixIcon: Icon(Icons.height),
                 suffixText: 'cm',
               ),
@@ -297,7 +318,6 @@ class _CadastroPacienteScreenState extends State<CadastroPacienteScreen> {
               controller: _creatininaController,
               decoration: const InputDecoration(
                 labelText: 'Creatinina',
-                hintText: 'Valor sérico',
                 prefixIcon: Icon(Icons.science),
                 suffixText: 'mg/dL',
               ),
@@ -307,17 +327,6 @@ class _CadastroPacienteScreenState extends State<CadastroPacienteScreen> {
                 FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
               ],
               onChanged: (_) => _calcularIndicadores(),
-              validator: (value) {
-                if (value != null && value.isNotEmpty) {
-                  final creatinina = double.tryParse(value);
-                  if (creatinina == null ||
-                      creatinina < 0.3 ||
-                      creatinina > 15) {
-                    return 'Creatinina deve estar entre 0.3 e 15.0 mg/dL';
-                  }
-                }
-                return null;
-              },
             ),
             if (_tfg != null) ...[
               const SizedBox(height: 16),
@@ -336,16 +345,6 @@ class _CadastroPacienteScreenState extends State<CadastroPacienteScreen> {
                         'Classificação: $_classificacaoTFG',
                         style: Theme.of(context).textTheme.bodyMedium,
                       ),
-                      if (_tfg! < 60) ...[
-                        const SizedBox(height: 8),
-                        Text(
-                          _calcularTFG.orientacaoAjuste(_tfg!),
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodySmall
-                              ?.copyWith(color: Colors.orange[900]),
-                        ),
-                      ],
                     ],
                   ),
                 ),
@@ -361,15 +360,15 @@ class _CadastroPacienteScreenState extends State<CadastroPacienteScreen> {
               controller: _localInternacaoController,
               decoration: const InputDecoration(
                 labelText: 'Local de Internação',
-                hintText: 'Enfermaria, leito, etc.',
                 prefixIcon: Icon(Icons.local_hospital),
               ),
               textCapitalization: TextCapitalization.words,
             ),
             const SizedBox(height: 32),
-            ElevatedButton(
-              onPressed: _proximaEtapa,
-              child: const Text('Próxima Etapa: Dados Clínicos'),
+            ElevatedButton.icon(
+              onPressed: _salvarAlteracoes,
+              icon: const Icon(Icons.save),
+              label: const Text('Salvar Alterações'),
             ),
           ],
         ),
