@@ -96,8 +96,11 @@ class _CadastroPacienteScreenState extends State<CadastroPacienteScreen> {
 
       // Salva o paciente no banco de dados
       try {
+        print('DEBUG CADASTRO: Salvando paciente ${paciente.nome}...');
         final id = await context.read<PacienteProvider>().salvarPaciente(paciente);
+        print('DEBUG CADASTRO: Paciente salvo com ID: $id');
         final pacienteSalvo = paciente.copyWith(id: id);
+        print('DEBUG CADASTRO: Paciente com ID atualizado: ${pacienteSalvo.id}');
         
         if (mounted) {
           Navigator.push(

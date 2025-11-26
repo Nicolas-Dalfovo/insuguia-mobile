@@ -54,11 +54,16 @@ class PacienteProvider extends ChangeNotifier {
   // Salva um novo paciente
   Future<int> salvarPaciente(Paciente paciente) async {
     try {
+      print('DEBUG PROVIDER: Salvando paciente ${paciente.nome}...');
       final id = await _repository.salvarPaciente(paciente);
+      print('DEBUG PROVIDER: Paciente salvo com ID: $id');
+      print('DEBUG PROVIDER: Recarregando lista de pacientes...');
       await carregarPacientes();
+      print('DEBUG PROVIDER: Total de pacientes após salvar: ${_pacientes.length}');
       return id;
     } catch (e) {
       _erro = 'Erro ao salvar paciente: $e';
+      print('DEBUG PROVIDER ERRO: $e');
       debugPrint('Erro ao salvar paciente: $e');
       notifyListeners();
       rethrow;
