@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'core/themes/app_theme.dart';
+import 'data/database/hive_helper.dart';
 import 'presentation/providers/paciente_provider.dart';
 import 'presentation/screens/home_screen.dart';
 
@@ -8,6 +9,9 @@ import 'presentation/screens/home_screen.dart';
 void main() async {
   // Garante que os bindings do Flutter estejam inicializados antes de usar plugins
   WidgetsFlutterBinding.ensureInitialized();
+  
+  // Inicializa o Hive (banco de dados local compatível com Web)
+  await HiveHelper.instance.initialize();
   
   runApp(const InsuGuiaApp());
 }

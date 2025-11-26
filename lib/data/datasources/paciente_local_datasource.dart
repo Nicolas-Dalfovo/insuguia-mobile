@@ -1,73 +1,78 @@
-import '../database/database_helper.dart';
-import '../models/paciente_model.dart';
+import 'package:hive/hive.dart';
+import '../../domain/entities/paciente.dart';
+import '../database/hive_helper.dart';
 
-// Datasource para operações de CRUD de Paciente no SQLite
+// Datasource para operações de CRUD de Paciente usando Hive
 class PacienteLocalDataSource {
-  final DatabaseHelper _dbHelper = DatabaseHelper.instance;
+  final HiveHelper _hiveHelper = HiveHelper.instance;
+  static const String _boxName = 'pacientes';
+
+  // Abre a box de pacientes
+  Future<Box<Paciente>> _getBox() async {
+    return await _hiveHelper.openBox<Paciente>(_boxName);
+  }
 
   // Insere um novo paciente no banco
-  Future<int> inserirPaciente(PacienteModel paciente) async {
-    final db = await _dbHelper.database;
-    return await db.insert('pacientes', paciente.toMap());
+  Future<int> inserirPaciente(Paciente paciente) async {
+    final box = await _getBox();
+    final key = await box.add(paciente);
+    
+    // Atualiza o ID do paciente com a chave gerada
+    paciente.id = key;
+    await box.put(key, paciente);
+    
+    return key;
   }
 
   // Busca todos os pacientes cadastrados
-  Future<List<PacienteModel>> buscarTodosPacientes() async {
-    final db = await _dbHelper.database;
-    final result = await db.query(
-      'pacientes',
-      orderBy: 'dataCadastro DESC',
-    );
-
-    return result.map((map) => PacienteModel.fromMap(map)).toList();
+  Future<List<Paciente>> buscarTodosPacientes() async {
+    final box = await _getBox();
+    final pacientes = box.values.toList();
+    
+    // Ordena por data de cadastro (mais recentes primeiro)
+    pacientes.sort((a, b) => b.dataCadastro.compareTo(a.dataCadastro));
+    
+    return pacientes;
   }
 
   // Busca um paciente por ID
-  Future<PacienteModel?> buscarPacientePorId(int id) async {
-    final db = await _dbHelper.database;
-    final result = await db.query(
-      'pacientes',
-      where: 'id = ?',
-      whereArgs: [id],
-    );
-
-    if (result.isNotEmpty) {
-      return PacienteModel.fromMap(result.first);
-    }
-    return null;
+  Future<Paciente?> buscarPacientePorId(int id) async {
+    final box = await _getBox();
+    return box.get(id);
   }
 
   // Atualiza os dados de um paciente
-  Future<int> atualizarPaciente(PacienteModel paciente) async {
-    final db = await _dbHelper.database;
-    return await db.update(
-      'pacientes',
-      paciente.toMap(),
-      where: 'id = ?',
-      whereArgs: [paciente.id],
-    );
+  Future<int> atualizarPaciente(Paciente paciente) async {
+    if (paciente.id == null) {
+      throw Exception('Paciente sem ID não pode ser atualizado');
+    }
+    
+    final box = await _getBox();
+    await box.put(paciente.id, paciente);
+    
+    return 1; // Retorna 1 para indicar sucesso (compatibilidade com SQLite)
   }
 
   // Exclui um paciente do banco
   Future<int> excluirPaciente(int id) async {
-    final db = await _dbHelper.database;
-    return await db.delete(
-      'pacientes',
-      where: 'id = ?',
-      whereArgs: [id],
-    );
+    final box = await _getBox();
+    await box.delete(id);
+    
+    return 1; // Retorna 1 para indicar sucesso (compatibilidade com SQLite)
   }
 
   // Busca pacientes por nome (pesquisa)
-  Future<List<PacienteModel>> buscarPacientesPorNome(String nome) async {
-    final db = await _dbHelper.database;
-    final result = await db.query(
-      'pacientes',
-      where: 'nome LIKE ?',
-      whereArgs: ['%$nome%'],
-      orderBy: 'dataCadastro DESC',
-    );
-
-    return result.map((map) => PacienteModel.fromMap(map)).toList();
+  Future<List<Paciente>> buscarPacientesPorNome(String nome) async {
+    final box = await _getBox();
+    final nomeLower = nome.toLowerCase();
+    
+    final pacientes = box.values
+        .where((p) => p.nome.toLowerCase().contains(nomeLower))
+        .toList();
+    
+    // Ordena por data de cadastro (mais recentes primeiro)
+    pacientes.sort((a, b) => b.dataCadastro.compareTo(a.dataCadastro));
+    
+    return pacientes;
   }
 }

@@ -1,6 +1,5 @@
 import '../../domain/entities/paciente.dart';
 import '../datasources/paciente_local_datasource.dart';
-import '../models/paciente_model.dart';
 
 // Repositório para gerenciar operações com Paciente
 class PacienteRepository {
@@ -11,8 +10,7 @@ class PacienteRepository {
 
   // Salva um novo paciente
   Future<int> salvarPaciente(Paciente paciente) async {
-    final model = PacienteModel.fromEntity(paciente);
-    return await _localDataSource.inserirPaciente(model);
+    return await _localDataSource.inserirPaciente(paciente);
   }
 
   // Busca todos os pacientes
@@ -27,8 +25,7 @@ class PacienteRepository {
 
   // Atualiza os dados de um paciente
   Future<int> atualizarPaciente(Paciente paciente) async {
-    final model = PacienteModel.fromEntity(paciente);
-    return await _localDataSource.atualizarPaciente(model);
+    return await _localDataSource.atualizarPaciente(paciente);
   }
 
   // Exclui um paciente

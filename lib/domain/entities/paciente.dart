@@ -1,15 +1,43 @@
-class Paciente {
-  final int? id;
+import 'package:hive/hive.dart';
+
+part 'paciente.g.dart';
+
+@HiveType(typeId: 0)
+class Paciente extends HiveObject {
+  @HiveField(0)
+  int? id;
+
+  @HiveField(1)
   final String nome;
+
+  @HiveField(2)
   final String sexo;
+
+  @HiveField(3)
   final int idade;
+
+  @HiveField(4)
   final double peso;
+
+  @HiveField(5)
   final double altura;
+
+  @HiveField(6)
   final double? imc;
+
+  @HiveField(7)
   final double? creatinina;
+
+  @HiveField(8)
   final double? tfg;
+
+  @HiveField(9)
   final String? localInternacao;
+
+  @HiveField(10)
   final DateTime dataCadastro;
+
+  @HiveField(11)
   final bool ativo;
 
   Paciente({
