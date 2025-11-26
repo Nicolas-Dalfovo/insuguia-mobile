@@ -113,11 +113,11 @@ lib/
 
 O aplicativo utiliza **SQLite** através do pacote `sqflite`, um banco de dados relacional leve e confiável:
 
--   Android ✅
--   iOS ✅
--   Windows ✅
--   macOS ✅
--   Linux ✅
+-   Android
+-   iOS
+-   Windows
+-   macOS
+-   Linux
 
 **Vantagens do SQLite:**
 -   Banco de dados relacional robusto e testado
@@ -138,4 +138,4 @@ Este é um projeto acadêmico e não deve ser utilizado para decisões clínicas
 
 ---
 
-*Desenvolvido pelo Curso de Sistemas de Informação - 2025*
+*Desenvolvido por Nicolas Marquez Dalfovo - 2025*
