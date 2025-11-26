@@ -176,7 +176,7 @@ class _CadastroPacienteScreenState extends State<CadastroPacienteScreen> {
               controller: _idadeController,
               decoration: const InputDecoration(
                 labelText: 'Idade',
-                hintText: 'Em anos',
+                hintText: '18 a 120 anos',
                 prefixIcon: Icon(Icons.cake),
                 suffixText: 'anos',
               ),
@@ -218,7 +218,7 @@ class _CadastroPacienteScreenState extends State<CadastroPacienteScreen> {
               controller: _pesoController,
               decoration: const InputDecoration(
                 labelText: 'Peso',
-                hintText: 'Em quilogramas',
+                hintText: '30 a 300 kg',
                 prefixIcon: Icon(Icons.monitor_weight),
                 suffixText: 'kg',
               ),
@@ -244,7 +244,7 @@ class _CadastroPacienteScreenState extends State<CadastroPacienteScreen> {
               controller: _alturaController,
               decoration: const InputDecoration(
                 labelText: 'Altura',
-                hintText: 'Em centímetros',
+                hintText: '100 a 250 cm',
                 prefixIcon: Icon(Icons.height),
                 suffixText: 'cm',
               ),

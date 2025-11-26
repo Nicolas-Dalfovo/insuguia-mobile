@@ -214,6 +214,7 @@ class _EditarPacienteScreenState extends State<EditarPacienteScreen> {
               controller: _idadeController,
               decoration: const InputDecoration(
                 labelText: 'Idade',
+                hintText: '18 a 120 anos',
                 prefixIcon: Icon(Icons.cake),
                 suffixText: 'anos',
               ),
@@ -241,6 +242,7 @@ class _EditarPacienteScreenState extends State<EditarPacienteScreen> {
               controller: _pesoController,
               decoration: const InputDecoration(
                 labelText: 'Peso',
+                hintText: '30 a 300 kg',
                 prefixIcon: Icon(Icons.monitor_weight),
                 suffixText: 'kg',
               ),
@@ -266,6 +268,7 @@ class _EditarPacienteScreenState extends State<EditarPacienteScreen> {
               controller: _alturaController,
               decoration: const InputDecoration(
                 labelText: 'Altura',
+                hintText: '100 a 250 cm',
                 prefixIcon: Icon(Icons.height),
                 suffixText: 'cm',
               ),
