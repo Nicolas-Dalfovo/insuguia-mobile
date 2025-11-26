@@ -17,18 +17,26 @@ class DatabaseHelper {
 
   // Inicializa o banco de dados
   Future<Database> _initDB(String filePath) async {
-    final dbPath = await getDatabasesPath();
-    final path = join(dbPath, filePath);
+    try {
+      final dbPath = await getDatabasesPath();
+      final path = join(dbPath, filePath);
 
-    return await openDatabase(
-      path,
-      version: 1,
-      onCreate: _createDB,
-    );
+      return await openDatabase(
+        path,
+        version: 1,
+        onCreate: _createDB,
+        onConfigure: (db) async {
+          await db.execute('PRAGMA foreign_keys = ON');
+        },
+      );
+    } catch (e) {
+      print('Erro ao inicializar banco de dados: $e');
+      rethrow;
+    }
   }
 
   // Cria as tabelas do banco de dados
-  Future _createDB(Database db, int version) async {
+  Future<void> _createDB(Database db, int version) async {
     const idType = 'INTEGER PRIMARY KEY AUTOINCREMENT';
     const textType = 'TEXT NOT NULL';
     const textTypeNullable = 'TEXT';
@@ -91,8 +99,9 @@ class DatabaseHelper {
   }
 
   // Fecha o banco de dados
-  Future close() async {
+  Future<void> close() async {
     final db = await instance.database;
-    db.close();
+    await db.close();
+    _database = null;
   }
 }

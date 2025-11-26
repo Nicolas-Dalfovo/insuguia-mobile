@@ -8,6 +8,7 @@ class PacienteProvider extends ChangeNotifier {
   List<Paciente> _pacientes = [];
   bool _isLoading = false;
   String? _erro;
+  bool _initialized = false;
 
   PacienteProvider({PacienteRepository? repository})
       : _repository = repository ?? PacienteRepository();
@@ -15,6 +16,21 @@ class PacienteProvider extends ChangeNotifier {
   List<Paciente> get pacientes => _pacientes;
   bool get isLoading => _isLoading;
   String? get erro => _erro;
+  bool get initialized => _initialized;
+
+  // Inicializa o provider e carrega os pacientes
+  Future<void> initialize() async {
+    if (_initialized) return;
+    
+    try {
+      await carregarPacientes();
+      _initialized = true;
+    } catch (e) {
+      _erro = 'Erro ao inicializar: $e';
+      debugPrint('Erro ao inicializar PacienteProvider: $e');
+      notifyListeners();
+    }
+  }
 
   // Carrega todos os pacientes do banco
   Future<void> carregarPacientes() async {
@@ -24,8 +40,11 @@ class PacienteProvider extends ChangeNotifier {
 
     try {
       _pacientes = await _repository.buscarTodosPacientes();
+      _erro = null;
     } catch (e) {
       _erro = 'Erro ao carregar pacientes: $e';
+      debugPrint('Erro ao carregar pacientes: $e');
+      _pacientes = [];
     } finally {
       _isLoading = false;
       notifyListeners();
@@ -40,6 +59,7 @@ class PacienteProvider extends ChangeNotifier {
       return id;
     } catch (e) {
       _erro = 'Erro ao salvar paciente: $e';
+      debugPrint('Erro ao salvar paciente: $e');
       notifyListeners();
       rethrow;
     }
@@ -52,6 +72,7 @@ class PacienteProvider extends ChangeNotifier {
       await carregarPacientes();
     } catch (e) {
       _erro = 'Erro ao atualizar paciente: $e';
+      debugPrint('Erro ao atualizar paciente: $e');
       notifyListeners();
       rethrow;
     }
@@ -64,6 +85,7 @@ class PacienteProvider extends ChangeNotifier {
       await carregarPacientes();
     } catch (e) {
       _erro = 'Erro ao excluir paciente: $e';
+      debugPrint('Erro ao excluir paciente: $e');
       notifyListeners();
       rethrow;
     }
@@ -81,8 +103,11 @@ class PacienteProvider extends ChangeNotifier {
       } else {
         _pacientes = await _repository.buscarPacientesPorNome(nome);
       }
+      _erro = null;
     } catch (e) {
       _erro = 'Erro ao buscar pacientes: $e';
+      debugPrint('Erro ao buscar pacientes: $e');
+      _pacientes = [];
     } finally {
       _isLoading = false;
       notifyListeners();

@@ -20,9 +20,21 @@ class _ListaPacientesScreenState extends State<ListaPacientesScreen> {
   @override
   void initState() {
     super.initState();
-    // Carrega os pacientes ao iniciar a tela
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<PacienteProvider>().carregarPacientes();
+    // Inicializa e carrega os pacientes ao iniciar a tela
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      try {
+        await context.read<PacienteProvider>().initialize();
+      } catch (e) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Erro ao inicializar: $e'),
+              backgroundColor: Colors.red,
+              duration: const Duration(seconds: 5),
+            ),
+          );
+        }
+      }
     });
   }
 
