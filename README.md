@@ -26,12 +26,12 @@ O aplicativo categoriza o paciente, avalia sua sensibilidade à insulina e, com 
 -   **Categorização Clínica:** Classificação da sensibilidade à insulina (sensível, usual, resistente) e determinação do esquema de insulinoterapia (correção isolada, basal-plus, basal-bolus)
 -   **Geração de Prescrição:** Criação de uma prescrição completa e detalhada, pronta para ser copiada e utilizada
 -   **Interface Intuitiva:** Fluxo de telas guiado para facilitar o uso no ambiente hospitalar
--   **Persistência de Dados:** Banco de dados Hive para armazenar pacientes e prescrições
+-   **Persistência de Dados:** Banco de dados SQLite para armazenar pacientes e prescrições
 -   **Listagem de Pacientes:** Visualização de todos os pacientes cadastrados com busca por nome
 -   **Edição de Pacientes:** Atualização de dados de pacientes já cadastrados
 -   **Exclusão de Pacientes:** Remoção de pacientes do sistema com confirmação
 -   **Exportação em PDF:** Geração de PDF profissional da prescrição com compartilhamento via sistema nativo
--   **Compatibilidade Web:** Funciona perfeitamente em navegadores web
+
 
 -   **Visualização de Prescrições Anteriores:** Histórico completo de prescrições de cada paciente com detalhes e opções de exportação
 
@@ -47,7 +47,7 @@ O aplicativo foi desenvolvido utilizando a arquitetura **Clean Architecture**, s
 
 1.  **Presentation:** Interface do usuário, construída com Widgets do Flutter e gerenciamento de estado com Provider
 2.  **Domain:** Lógica de negócio, regras clínicas, entidades e casos de uso (use cases)
-3.  **Data:** Acesso e persistência de dados com Hive, datasources e repositórios
+3.  **Data:** Acesso e persistência de dados com SQLite, datasources e repositórios
 
 ## Como Executar o Projeto
 
@@ -73,13 +73,6 @@ O aplicativo foi desenvolvido utilizando a arquitetura **Clean Architecture**, s
 
 3.  **Execute o aplicativo:**
 
-    **Para Web:**
-    ```bash
-    flutter run -d chrome
-    ```
-    
-    **Nota:** O aplicativo agora persiste dados automaticamente, independente da porta usada. O Hive foi configurado para usar um subdiretório fixo (`insuguia_db`) que garante a persistência entre sessões.
-
     **Para Android/iOS:**
     ```bash
     flutter run
@@ -94,13 +87,13 @@ O aplicativo foi desenvolvido utilizando a arquitetura **Clean Architecture**, s
 
 ```
 lib/
-├── core/              # Constantes, temas, utilitários
-├── data/              # Fontes de dados, repositórios, banco de dados
-│   ├── database/      # Helper do Hive
+├── core/              # Constantes, temas, utilitários, banco de dados
+│   └── database/      # DatabaseHelper do SQLite
+├── data/              # Fontes de dados, repositórios
 │   ├── datasources/   # Datasources para operações CRUD
 │   └── repositories/  # Repositórios para acesso aos dados
 ├── domain/            # Entidades, casos de uso, lógica de negócio
-│   ├── entities/      # Entidades do domínio com adaptadores Hive
+│   ├── entities/      # Entidades do domínio
 │   └── usecases/      # Casos de uso (lógica clínica)
 ├── presentation/      # Telas, widgets, providers
 │   ├── providers/     # Gerenciamento de estado com Provider
@@ -112,27 +105,26 @@ lib/
 
 -   **Flutter 3.35.7** - Framework multiplataforma
 -   **Dart** - Linguagem de programação
--   **Hive** - Banco de dados NoSQL rápido e compatível com Web
+-   **SQLite (sqflite)** - Banco de dados relacional leve e confiável
 -   **Provider** - Gerenciamento de estado
 -   **Clean Architecture** - Arquitetura de software
 
 ## Banco de Dados
 
-O aplicativo utiliza **Hive**, um banco de dados NoSQL leve e rápido que funciona em todas as plataformas suportadas pelo Flutter:
+O aplicativo utiliza **SQLite** através do pacote `sqflite`, um banco de dados relacional leve e confiável:
 
--   Android
--   iOS
--   Web
--   Windows
--   macOS
--   Linux
+-   Android ✅
+-   iOS ✅
+-   Windows ✅
+-   macOS ✅
+-   Linux ✅
 
-**Vantagens do Hive:**
--   Compatível com Flutter Web (diferente do SQLite)
--   Mais rápido que SQLite
--   Sintaxe simples e intuitiva
--   Sem necessidade de escrever SQL
--   Armazenamento local seguro
+**Vantagens do SQLite:**
+-   Banco de dados relacional robusto e testado
+-   Excelente performance em dispositivos móveis
+-   Suporte a transações e integridade referencial
+-   Amplamente utilizado e documentado
+-   Armazenamento local seguro e persistente
 
 ## Documentação Adicional
 
