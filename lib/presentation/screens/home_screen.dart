@@ -3,6 +3,7 @@ import '../../core/constants/app_constants.dart';
 import 'aviso_legal_screen.dart';
 import 'lista_pacientes_screen.dart';
 import 'teste_hive_screen.dart';
+import 'teste_fluxo_completo_screen.dart';
 
 
 class HomeScreen extends StatelessWidget {
@@ -114,6 +115,23 @@ class HomeScreen extends StatelessWidget {
                 style: OutlinedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(vertical: 16),
                   foregroundColor: Colors.orange,
+                ),
+              ),
+              const SizedBox(height: 16),
+              OutlinedButton.icon(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const TesteFluxoCompletoScreen(),
+                    ),
+                  );
+                },
+                icon: const Icon(Icons.playlist_add_check),
+                label: const Text('Teste Fluxo Completo (Debug)'),
+                style: OutlinedButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  foregroundColor: Colors.green,
                 ),
               ),
             ],
