@@ -114,7 +114,7 @@ class _DadosClinicosScreenState extends State<DadosClinicosScreen> {
               controller: _glicemiaAdmissaoController,
               decoration: const InputDecoration(
                 labelText: 'Glicemia de Admissão',
-                hintText: 'Valor da glicemia capilar',
+                hintText: '40 a 600 mg/dL',
                 prefixIcon: Icon(Icons.water_drop),
                 suffixText: 'mg/dL',
               ),
@@ -138,7 +138,7 @@ class _DadosClinicosScreenState extends State<DadosClinicosScreen> {
               controller: _hba1cController,
               decoration: const InputDecoration(
                 labelText: 'HbA1c',
-                hintText: 'Hemoglobina glicada',
+                hintText: '4.0 a 15.0%',
                 prefixIcon: Icon(Icons.science),
                 suffixText: '%',
               ),
@@ -207,7 +207,7 @@ class _DadosClinicosScreenState extends State<DadosClinicosScreen> {
                   controller: _doseInsulinaPreviaController,
                   decoration: const InputDecoration(
                     labelText: 'Dose Diária de Insulina',
-                    hintText: 'Dose total diária em uso domiciliar',
+                    hintText: '0.1 a 3.0 UI/kg/dia',
                     prefixIcon: Icon(Icons.medication),
                     suffixText: 'UI/kg/dia',
                   ),
@@ -261,7 +261,7 @@ class _DadosClinicosScreenState extends State<DadosClinicosScreen> {
                 controller: _doseCorticoideController,
                 decoration: const InputDecoration(
                   labelText: 'Dose de Corticoide',
-                  hintText: 'Dose equivalente de prednisona',
+                  hintText: '5 a 200 mg/dia',
                   prefixIcon: Icon(Icons.medication),
                   suffixText: 'mg/dia',
                 ),

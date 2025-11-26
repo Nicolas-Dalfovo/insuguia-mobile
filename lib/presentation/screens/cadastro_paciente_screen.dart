@@ -297,7 +297,7 @@ class _CadastroPacienteScreenState extends State<CadastroPacienteScreen> {
               controller: _creatininaController,
               decoration: const InputDecoration(
                 labelText: 'Creatinina',
-                hintText: 'Valor sérico',
+                hintText: '0.3 a 15.0 mg/dL',
                 prefixIcon: Icon(Icons.science),
                 suffixText: 'mg/dL',
               ),
