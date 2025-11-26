@@ -10,12 +10,8 @@ import 'presentation/providers/paciente_provider.dart';
 import 'presentation/providers/prescricao_provider.dart';
 import 'presentation/screens/home_screen.dart';
 
-void main() async {
+void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  
-  // Inicializa o banco de dados
-  await DatabaseHelper.instance.database;
-  
   runApp(const InsuGuiaApp());
 }
 
