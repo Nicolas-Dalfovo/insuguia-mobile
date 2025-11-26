@@ -7,6 +7,7 @@ import '../../domain/usecases/calcular_doses_insulina.dart';
 import '../../domain/usecases/classificar_sensibilidade_insulinica.dart';
 import '../../domain/usecases/determinar_esquema_insulina.dart';
 import '../../domain/usecases/gerar_prescricao.dart';
+import '../../core/services/pdf_service.dart';
 import '../screens/home_screen.dart';
 
 class ResultadoPrescricaoScreen extends StatefulWidget {
@@ -114,6 +115,42 @@ class _ResultadoPrescricaoScreenState extends State<ResultadoPrescricaoScreen> {
         duration: Duration(seconds: 2),
       ),
     );
+  }
+
+  Future<void> _exportarPdf() async {
+    try {
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) => const Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
+
+      await PdfService.compartilharPdf(widget.paciente, _prescricao);
+
+      if (mounted) {
+        Navigator.of(context).pop();
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('PDF gerado com sucesso'),
+            backgroundColor: Colors.green,
+            duration: Duration(seconds: 2),
+          ),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        Navigator.of(context).pop();
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Erro ao gerar PDF: $e'),
+            backgroundColor: Colors.red,
+            duration: const Duration(seconds: 3),
+          ),
+        );
+      }
+    }
   }
 
   void _voltarInicio() {
@@ -293,12 +330,20 @@ class _ResultadoPrescricaoScreenState extends State<ResultadoPrescricaoScreen> {
                   label: const Text('Copiar'),
                 ),
               ),
-              const SizedBox(width: 16),
+              const SizedBox(width: 8),
+              Expanded(
+                child: OutlinedButton.icon(
+                  onPressed: _exportarPdf,
+                  icon: const Icon(Icons.picture_as_pdf),
+                  label: const Text('Exportar PDF'),
+                ),
+              ),
+              const SizedBox(width: 8),
               Expanded(
                 child: ElevatedButton.icon(
                   onPressed: _voltarInicio,
                   icon: const Icon(Icons.home),
-                  label: const Text('Voltar ao Início'),
+                  label: const Text('Início'),
                 ),
               ),
             ],
