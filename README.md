@@ -33,9 +33,10 @@ O aplicativo categoriza o paciente, avalia sua sensibilidade à insulina e, com 
 -   **Exportação em PDF:** Geração de PDF profissional da prescrição com compartilhamento via sistema nativo
 -   **Compatibilidade Web:** Funciona perfeitamente em navegadores web
 
+-   **Visualização de Prescrições Anteriores:** Histórico completo de prescrições de cada paciente com detalhes e opções de exportação
+
 ### Em Desenvolvimento
 
--   Visualização de prescrições anteriores
 -   Acompanhamento diário com registro de glicemias
 -   Ajuste automático de doses baseado em glicemias diárias
 -   Orientações para alta hospitalar
