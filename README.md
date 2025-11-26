@@ -30,7 +30,7 @@ O aplicativo categoriza o paciente, avalia sua sensibilidade à insulina e, com 
 -   **Listagem de Pacientes:** Visualização de todos os pacientes cadastrados com busca por nome
 -   **Edição de Pacientes:** Atualização de dados de pacientes já cadastrados
 -   **Exclusão de Pacientes:** Remoção de pacientes do sistema com confirmação
--   **Exportação em PDF:** Geração de PDF profissional da prescrição com compartilhamento via sistema nativo
+-   **Exportação em PDF:** Geração de PDF profissional da prescrição
 
 
 -   **Visualização de Prescrições Anteriores:** Histórico completo de prescrições de cada paciente com detalhes e opções de exportação
