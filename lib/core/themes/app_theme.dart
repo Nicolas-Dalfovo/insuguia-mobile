@@ -39,11 +39,12 @@ class AppTheme {
         color: Colors.white,
       ),
     ),
-    cardTheme: const CardThemeData(
+    cardTheme: CardThemeData(
       elevation: 2,
-      shape: RoundedRectangleBorder(   borderRadius: BorderRadius.circular(12),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
       ),
-      margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
     ),
     inputDecorationTheme: InputDecorationTheme(
       filled: true,

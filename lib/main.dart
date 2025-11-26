@@ -5,7 +5,10 @@ import 'presentation/providers/paciente_provider.dart';
 import 'presentation/screens/home_screen.dart';
 
 // Ponto de entrada da aplicação
-void main() {
+void main() async {
+  // Garante que os bindings do Flutter estejam inicializados antes de usar plugins
+  WidgetsFlutterBinding.ensureInitialized();
+  
   runApp(const InsuGuiaApp());
 }
 
