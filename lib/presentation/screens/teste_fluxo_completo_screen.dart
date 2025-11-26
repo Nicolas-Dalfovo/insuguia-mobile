@@ -143,16 +143,19 @@ class _TesteFluxoCompletoScreenState extends State<TesteFluxoCompletoScreen> {
       _addLog('ETAPA 4: Salvando prescrição...');
       _addLog('Paciente ID da prescrição: ${prescricao.pacienteId}');
       
-      await prescricaoProvider.salvarPrescricao(prescricao);
+      final prescricaoId = await prescricaoProvider.salvarPrescricao(prescricao);
       await Future.delayed(const Duration(milliseconds: 500));
 
-      if (prescricao.id == null) {
+      if (prescricaoId == null) {
         _addLog('ERRO: Prescrição não recebeu ID!');
+        _addLog('Provider retornou: $prescricaoId');
         setState(() => _testando = false);
         return;
       }
 
-      _addLog('Prescrição salva com ID: ${prescricao.id}');
+      _addLog('Prescrição salva com ID: $prescricaoId');
+      _addLog('prescricao.id: ${prescricao.id}');
+      _addLog('prescricao.key: ${prescricao.key}');
       _addLog('');
 
       // Etapa 5: Buscar prescrições do paciente
