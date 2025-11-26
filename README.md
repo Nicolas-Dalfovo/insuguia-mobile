@@ -26,10 +26,11 @@ O aplicativo categoriza o paciente, avalia sua sensibilidade à insulina e, com 
 -   **Categorização Clínica:** Classificação da sensibilidade à insulina (sensível, usual, resistente) e determinação do esquema de insulinoterapia (correção isolada, basal-plus, basal-bolus)
 -   **Geração de Prescrição:** Criação de uma prescrição completa e detalhada, pronta para ser copiada e utilizada
 -   **Interface Intuitiva:** Fluxo de telas guiado para facilitar o uso no ambiente hospitalar
--   **Persistência de Dados:** Banco de dados SQLite para armazenar pacientes e prescrições
+-   **Persistência de Dados:** Banco de dados Hive para armazenar pacientes e prescrições
 -   **Listagem de Pacientes:** Visualização de todos os pacientes cadastrados com busca por nome
 -   **Edição de Pacientes:** Atualização de dados de pacientes já cadastrados
 -   **Exclusão de Pacientes:** Remoção de pacientes do sistema com confirmação
+-   **Compatibilidade Web:** Funciona perfeitamente em navegadores web
 
 ### Em Desenvolvimento
 
@@ -45,14 +46,14 @@ O aplicativo foi desenvolvido utilizando a arquitetura **Clean Architecture**, s
 
 1.  **Presentation:** Interface do usuário, construída com Widgets do Flutter e gerenciamento de estado com Provider
 2.  **Domain:** Lógica de negócio, regras clínicas, entidades e casos de uso (use cases)
-3.  **Data:** Acesso e persistência de dados com SQLite, modelos e repositórios
+3.  **Data:** Acesso e persistência de dados com Hive, datasources e repositórios
 
 ## Como Executar o Projeto
 
 ### Pré-requisitos
 
 -   [Flutter SDK](https://flutter.dev/docs/get-started/install) (versão 3.5.0 ou superior)
--   Um emulador Android/iOS ou um dispositivo físico
+-   Um emulador Android/iOS, dispositivo físico, ou navegador web
 
 ### Passos
 
@@ -71,8 +72,19 @@ O aplicativo foi desenvolvido utilizando a arquitetura **Clean Architecture**, s
 
 3.  **Execute o aplicativo:**
 
+    **Para Web:**
+    ```bash
+    flutter run -d chrome
+    ```
+
+    **Para Android/iOS:**
     ```bash
     flutter run
+    ```
+
+    **Para Desktop:**
+    ```bash
+    flutter run -d windows  # ou macos, linux
     ```
 
 ## Estrutura de Pastas
@@ -80,13 +92,12 @@ O aplicativo foi desenvolvido utilizando a arquitetura **Clean Architecture**, s
 ```
 lib/
 ├── core/              # Constantes, temas, utilitários
-├── data/              # Fontes de dados, modelos, repositórios, banco de dados
-│   ├── database/      # Helper do SQLite
+├── data/              # Fontes de dados, repositórios, banco de dados
+│   ├── database/      # Helper do Hive
 │   ├── datasources/   # Datasources para operações CRUD
-│   ├── models/        # Modelos de dados para persistência
 │   └── repositories/  # Repositórios para acesso aos dados
 ├── domain/            # Entidades, casos de uso, lógica de negócio
-│   ├── entities/      # Entidades do domínio
+│   ├── entities/      # Entidades do domínio com adaptadores Hive
 │   └── usecases/      # Casos de uso (lógica clínica)
 ├── presentation/      # Telas, widgets, providers
 │   ├── providers/     # Gerenciamento de estado com Provider
@@ -98,9 +109,27 @@ lib/
 
 -   **Flutter 3.35.7** - Framework multiplataforma
 -   **Dart** - Linguagem de programação
--   **SQLite (sqflite)** - Banco de dados local
+-   **Hive** - Banco de dados NoSQL rápido e compatível com Web
 -   **Provider** - Gerenciamento de estado
 -   **Clean Architecture** - Arquitetura de software
+
+## Banco de Dados
+
+O aplicativo utiliza **Hive**, um banco de dados NoSQL leve e rápido que funciona em todas as plataformas suportadas pelo Flutter:
+
+-   Android
+-   iOS
+-   Web
+-   Windows
+-   macOS
+-   Linux
+
+**Vantagens do Hive:**
+-   Compatível com Flutter Web (diferente do SQLite)
+-   Mais rápido que SQLite
+-   Sintaxe simples e intuitiva
+-   Sem necessidade de escrever SQL
+-   Armazenamento local seguro
 
 ## Documentação Adicional
 
