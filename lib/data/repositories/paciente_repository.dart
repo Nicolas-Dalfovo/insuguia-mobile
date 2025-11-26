@@ -1,40 +1,37 @@
 import '../../domain/entities/paciente.dart';
 import '../datasources/paciente_local_datasource.dart';
+import '../../core/database/database_helper.dart';
 
-// Repositório para gerenciar operações com Paciente
 class PacienteRepository {
   final PacienteLocalDataSource _localDataSource;
 
   PacienteRepository({PacienteLocalDataSource? localDataSource})
-      : _localDataSource = localDataSource ?? PacienteLocalDataSource();
+      : _localDataSource = localDataSource ?? 
+          PacienteLocalDataSource(DatabaseHelper.instance);
 
-  // Salva um novo paciente
   Future<int> salvarPaciente(Paciente paciente) async {
-    return await _localDataSource.inserirPaciente(paciente);
+    return await _localDataSource.salvarPaciente(paciente);
   }
 
-  // Busca todos os pacientes
   Future<List<Paciente>> buscarTodosPacientes() async {
-    return await _localDataSource.buscarTodosPacientes();
+    return await _localDataSource.listarPacientes();
   }
 
-  // Busca um paciente específico por ID
   Future<Paciente?> buscarPacientePorId(int id) async {
-    return await _localDataSource.buscarPacientePorId(id);
+    return await _localDataSource.buscarPaciente(id);
   }
 
-  // Atualiza os dados de um paciente
   Future<int> atualizarPaciente(Paciente paciente) async {
-    return await _localDataSource.atualizarPaciente(paciente);
+    return await _localDataSource.salvarPaciente(paciente);
   }
 
-  // Exclui um paciente
   Future<void> excluirPaciente(int id) async {
     await _localDataSource.deletarPaciente(id);
   }
 
-  // Busca pacientes por nome
   Future<List<Paciente>> buscarPacientesPorNome(String nome) async {
-    return await _localDataSource.buscarPacientesPorNome(nome);
+    final todos = await _localDataSource.listarPacientes();
+    final nomeLower = nome.toLowerCase();
+    return todos.where((p) => p.nome.toLowerCase().contains(nomeLower)).toList();
   }
 }

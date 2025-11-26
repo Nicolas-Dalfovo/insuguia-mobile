@@ -85,7 +85,9 @@ class _HistoricoPrescricoesScreenState
 
     if (confirmar == true && mounted) {
       final provider = Provider.of<PrescricaoProvider>(context, listen: false);
-      await provider.deletarPrescricao(prescricao.key as int);
+      if (prescricao.id != null) {
+        await provider.deletarPrescricao(prescricao.id!);
+      }
       await _carregarPrescricoes();
 
       if (mounted) {

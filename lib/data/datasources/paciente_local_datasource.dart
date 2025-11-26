@@ -1,125 +1,73 @@
-import 'package:hive/hive.dart';
+import 'package:sqflite/sqflite.dart';
 import '../../domain/entities/paciente.dart';
-import '../database/hive_helper.dart';
+import '../../core/database/database_helper.dart';
 
-// DataSource para operações com Paciente no banco Hive
 class PacienteLocalDataSource {
-  static const String _boxName = 'pacientes';
-  final HiveHelper _hiveHelper = HiveHelper.instance;
+  final DatabaseHelper _databaseHelper;
 
-  Future<Box<Paciente>> _getBox() async {
-    return await _hiveHelper.openBox<Paciente>(_boxName);
-  }
+  PacienteLocalDataSource(this._databaseHelper);
 
-  // Insere um novo paciente no banco
-  Future<int> inserirPaciente(Paciente paciente) async {
-    final box = await _getBox();
+  Future<int> salvarPaciente(Paciente paciente) async {
+    final db = await _databaseHelper.database;
     
-    print('DEBUG: Box tem ${box.length} itens antes de adicionar');
-    
-    // Adiciona o paciente ao box e obtém a key
-    final key = await box.add(paciente);
-    print('DEBUG: box.add() retornou key: $key');
-    print('DEBUG: paciente.key após add: ${paciente.key}');
-    
-    // Atualiza o ID do paciente com a chave gerada
-    paciente.id = key;
-    print('DEBUG: paciente.id atualizado para: ${paciente.id}');
-    
-    // Salva usando o método save() do HiveObject
-    await paciente.save();
-    print('DEBUG: paciente.save() executado');
-    print('DEBUG: paciente.key após save: ${paciente.key}');
-    print('DEBUG: paciente.id após save: ${paciente.id}');
-    
-    // Verifica se realmente foi salvo
-    final verificacao = box.get(key);
-    if (verificacao != null) {
-      print('DEBUG: Verificação - paciente encontrado com key $key');
-      print('DEBUG: Verificação - nome: ${verificacao.nome}, id: ${verificacao.id}');
+    if (paciente.id != null) {
+      await db.update(
+        'pacientes',
+        paciente.toMap(),
+        where: 'id = ?',
+        whereArgs: [paciente.id],
+      );
+      return paciente.id!;
     } else {
-      print('DEBUG: ERRO - paciente não encontrado com key $key');
+      return await db.insert(
+        'pacientes',
+        paciente.toMap(),
+        conflictAlgorithm: ConflictAlgorithm.replace,
+      );
     }
-    
-    print('DEBUG: Box tem ${box.length} itens após salvar');
-    
-    // Retorna a key do HiveObject, não o id
-    final keyFinal = paciente.key as int? ?? key;
-    print('DEBUG: Retornando key final: $keyFinal');
-    
-    return keyFinal;
   }
 
-  // Busca todos os pacientes cadastrados
-  Future<List<Paciente>> buscarTodosPacientes() async {
-    final box = await _getBox();
+  Future<Paciente?> buscarPaciente(int id) async {
+    final db = await _databaseHelper.database;
     
-    print('DEBUG: Total de pacientes no banco: ${box.length}');
-    
-    final pacientes = box.values.map((p) {
-      // Sincroniza o id com o key do Hive
-      if (p.key != null) {
-        final keyValue = p.key as int;
-        if (p.id != keyValue) {
-          p.id = keyValue;
-          print('DEBUG: Sincronizado paciente ${p.nome} - key: $keyValue, id: ${p.id}');
-        }
-      }
-      return p;
-    }).toList();
-    
-    // Ordena por data de cadastro (mais recentes primeiro)
-    pacientes.sort((a, b) => b.dataCadastro.compareTo(a.dataCadastro));
-    
-    return pacientes;
-  }
+    final maps = await db.query(
+      'pacientes',
+      where: 'id = ?',
+      whereArgs: [id],
+    );
 
-  // Busca um paciente por ID
-  Future<Paciente?> buscarPacientePorId(int id) async {
-    final box = await _getBox();
-    final paciente = box.get(id);
-    if (paciente != null && paciente.id != id) {
-      paciente.id = id;
+    if (maps.isNotEmpty) {
+      return Paciente.fromMap(maps.first);
     }
-    return paciente;
+    return null;
   }
 
-  // Atualiza os dados de um paciente
-  Future<int> atualizarPaciente(Paciente paciente) async {
-    if (paciente.id == null) {
-      throw Exception('Paciente não possui ID para atualização');
-    }
-
-    await paciente.save();
+  Future<List<Paciente>> listarPacientes() async {
+    final db = await _databaseHelper.database;
     
-    return paciente.id!;
+    final maps = await db.query(
+      'pacientes',
+      where: 'ativo = ?',
+      whereArgs: [1],
+      orderBy: 'dataCadastro DESC',
+    );
+
+    return maps.map((map) => Paciente.fromMap(map)).toList();
   }
 
-  // Deleta um paciente
   Future<void> deletarPaciente(int id) async {
-    final box = await _getBox();
-    await box.delete(id);
+    final db = await _databaseHelper.database;
+    
+    await db.update(
+      'pacientes',
+      {'ativo': 0},
+      where: 'id = ?',
+      whereArgs: [id],
+    );
   }
 
-  // Busca pacientes por nome
-  Future<List<Paciente>> buscarPacientesPorNome(String nome) async {
-    final box = await _getBox();
-    final nomeLower = nome.toLowerCase();
-    
-    final pacientes = box.values.where((p) {
-      // Sincroniza o id com o key do Hive
-      if (p.key != null) {
-        final keyValue = p.key as int;
-        if (p.id != keyValue) {
-          p.id = keyValue;
-        }
-      }
-      return p.nome.toLowerCase().contains(nomeLower);
-    }).toList();
-    
-    // Ordena por data de cadastro (mais recentes primeiro)
-    pacientes.sort((a, b) => b.dataCadastro.compareTo(a.dataCadastro));
-    
-    return pacientes;
+  Future<void> limparTodos() async {
+    final db = await _databaseHelper.database;
+    await db.delete('pacientes');
   }
 }

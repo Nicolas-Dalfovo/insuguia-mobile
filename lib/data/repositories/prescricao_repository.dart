@@ -1,44 +1,44 @@
 import '../../domain/entities/prescricao.dart';
 import '../datasources/prescricao_local_datasource.dart';
+import '../../core/database/database_helper.dart';
 
-// Repositório para gerenciar prescrições
 class PrescricaoRepository {
   final PrescricaoLocalDataSource _dataSource;
 
-  PrescricaoRepository(this._dataSource);
+  PrescricaoRepository({PrescricaoLocalDataSource? dataSource})
+      : _dataSource = dataSource ?? 
+          PrescricaoLocalDataSource(DatabaseHelper.instance);
 
-  // Salva uma prescrição
   Future<int> salvarPrescricao(Prescricao prescricao) async {
     return await _dataSource.salvarPrescricao(prescricao);
   }
 
-  // Busca prescrição por ID
   Future<Prescricao?> buscarPrescricaoPorId(int id) async {
-    return await _dataSource.buscarPrescricaoPorId(id);
+    return await _dataSource.buscarPrescricao(id);
   }
 
-  // Busca todas as prescrições de um paciente
   Future<List<Prescricao>> buscarPrescricoesPorPaciente(int pacienteId) async {
-    return await _dataSource.buscarPrescricoesPorPaciente(pacienteId);
+    return await _dataSource.listarPrescricoesPorPaciente(pacienteId);
   }
 
-  // Busca todas as prescrições
   Future<List<Prescricao>> buscarTodasPrescricoes() async {
-    return await _dataSource.buscarTodasPrescricoes();
+    return await _dataSource.listarTodasPrescricoes();
   }
 
-  // Atualiza uma prescrição
   Future<void> atualizarPrescricao(Prescricao prescricao) async {
-    await _dataSource.atualizarPrescricao(prescricao);
+    await _dataSource.salvarPrescricao(prescricao);
   }
 
-  // Deleta uma prescrição
   Future<void> deletarPrescricao(int id) async {
     await _dataSource.deletarPrescricao(id);
   }
 
-  // Deleta todas as prescrições de um paciente
   Future<void> deletarPrescricoesPorPaciente(int pacienteId) async {
-    await _dataSource.deletarPrescricoesPorPaciente(pacienteId);
+    final prescricoes = await _dataSource.listarPrescricoesPorPaciente(pacienteId);
+    for (final prescricao in prescricoes) {
+      if (prescricao.id != null) {
+        await _dataSource.deletarPrescricao(prescricao.id!);
+      }
+    }
   }
 }

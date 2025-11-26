@@ -52,7 +52,7 @@ class PrescricaoProvider with ChangeNotifier {
       final id = await _repository.salvarPrescricao(prescricao);
       print('DEBUG PROVIDER: Repository retornou ID: $id');
       print('DEBUG PROVIDER: prescricao.id após salvar: ${prescricao.id}');
-      print('DEBUG PROVIDER: prescricao.key após salvar: ${prescricao.key}');
+
       
       await carregarPrescricoes();
       print('DEBUG PROVIDER: Total de prescrições após salvar: ${_prescricoes.length}');

@@ -1,43 +1,16 @@
-import 'package:hive/hive.dart';
-
-part 'paciente.g.dart';
-
-@HiveType(typeId: 0)
-class Paciente extends HiveObject {
-  @HiveField(0)
+// Entidade que representa um paciente
+class Paciente {
   int? id;
-
-  @HiveField(1)
   final String nome;
-
-  @HiveField(2)
   final String sexo;
-
-  @HiveField(3)
   final int idade;
-
-  @HiveField(4)
   final double peso;
-
-  @HiveField(5)
   final double altura;
-
-  @HiveField(6)
   final double? imc;
-
-  @HiveField(7)
   final double? creatinina;
-
-  @HiveField(8)
   final double? tfg;
-
-  @HiveField(9)
   final String? localInternacao;
-
-  @HiveField(10)
   final DateTime dataCadastro;
-
-  @HiveField(11)
   final bool ativo;
 
   Paciente({
@@ -55,6 +28,43 @@ class Paciente extends HiveObject {
     this.ativo = true,
   }) : dataCadastro = dataCadastro ?? DateTime.now();
 
+  // Converte para Map (SQLite)
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'nome': nome,
+      'sexo': sexo,
+      'idade': idade,
+      'peso': peso,
+      'altura': altura,
+      'imc': imc,
+      'creatinina': creatinina,
+      'tfg': tfg,
+      'localInternacao': localInternacao,
+      'dataCadastro': dataCadastro.toIso8601String(),
+      'ativo': ativo,
+    };
+  }
+
+  // Cria a partir de Map (SQLite)
+  factory Paciente.fromMap(Map<String, dynamic> json) {
+    return Paciente(
+      id: json['id'] as int?,
+      nome: json['nome'] as String,
+      sexo: json['sexo'] as String,
+      idade: json['idade'] as int,
+      peso: (json['peso'] as num).toDouble(),
+      altura: (json['altura'] as num).toDouble(),
+      imc: json['imc'] != null ? (json['imc'] as num).toDouble() : null,
+      creatinina: json['creatinina'] != null ? (json['creatinina'] as num).toDouble() : null,
+      tfg: json['tfg'] != null ? (json['tfg'] as num).toDouble() : null,
+      localInternacao: json['localInternacao'] as String?,
+      dataCadastro: DateTime.parse(json['dataCadastro'] as String),
+      ativo: json['ativo'] as bool? ?? true,
+    );
+  }
+
+  // Copia com modificações
   Paciente copyWith({
     int? id,
     String? nome,
@@ -85,37 +95,17 @@ class Paciente extends HiveObject {
     );
   }
 
-  Map<String, dynamic> toMap() {
-    return {
-      'id': id,
-      'nome': nome,
-      'sexo': sexo,
-      'idade': idade,
-      'peso': peso,
-      'altura': altura,
-      'imc': imc,
-      'creatinina': creatinina,
-      'tfg': tfg,
-      'local_internacao': localInternacao,
-      'data_cadastro': dataCadastro.toIso8601String(),
-      'ativo': ativo ? 1 : 0,
-    };
+  @override
+  String toString() {
+    return 'Paciente(id: $id, nome: $nome, idade: $idade, peso: $peso, altura: $altura)';
   }
 
-  factory Paciente.fromMap(Map<String, dynamic> map) {
-    return Paciente(
-      id: map['id'],
-      nome: map['nome'],
-      sexo: map['sexo'],
-      idade: map['idade'],
-      peso: map['peso'],
-      altura: map['altura'],
-      imc: map['imc'],
-      creatinina: map['creatinina'],
-      tfg: map['tfg'],
-      localInternacao: map['local_internacao'],
-      dataCadastro: DateTime.parse(map['data_cadastro']),
-      ativo: map['ativo'] == 1,
-    );
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    return other is Paciente && other.id == id;
   }
+
+  @override
+  int get hashCode => id.hashCode;
 }

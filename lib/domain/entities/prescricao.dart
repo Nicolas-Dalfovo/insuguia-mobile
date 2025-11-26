@@ -1,15 +1,9 @@
-import 'package:hive/hive.dart';
+import 'dart:convert';
 import 'dados_clinicos.dart';
 
-part 'prescricao.g.dart';
-
-@HiveType(typeId: 1)
 enum TipoInsulinaBasal {
-  @HiveField(0)
   nph,
-  @HiveField(1)
   glargina,
-  @HiveField(2)
   degludeca;
 
   String get descricao {
@@ -34,15 +28,10 @@ enum TipoInsulinaBasal {
   }
 }
 
-@HiveType(typeId: 2)
 enum TipoInsulinaRapida {
-  @HiveField(0)
   regular,
-  @HiveField(1)
   aspart,
-  @HiveField(2)
   glulisina,
-  @HiveField(3)
   lispro;
 
   String get descricao {
@@ -70,12 +59,8 @@ enum TipoInsulinaRapida {
   }
 }
 
-@HiveType(typeId: 3)
 class HorarioInsulina {
-  @HiveField(0)
   final String horario;
-  
-  @HiveField(1)
   final double dose;
 
   HorarioInsulina({
@@ -98,15 +83,9 @@ class HorarioInsulina {
   }
 }
 
-@HiveType(typeId: 4)
 class EscalaCorrecao {
-  @HiveField(0)
   final double glicemiaInicio;
-  
-  @HiveField(1)
   final double glicemiaFim;
-  
-  @HiveField(2)
   final double dose;
 
   EscalaCorrecao({
@@ -139,54 +118,22 @@ class EscalaCorrecao {
   }
 }
 
-@HiveType(typeId: 5)
-class Prescricao extends HiveObject {
-  @HiveField(0)
+class Prescricao {
   int? id;
-
-  @HiveField(1)
   final int pacienteId;
-
-  @HiveField(2)
   final DateTime dataPrescricao;
-
-  @HiveField(3)
   final SensibilidadeInsulinica sensibilidadeInsulinica;
-
-  @HiveField(4)
   final EsquemaInsulina esquemaInsulina;
-
-  @HiveField(5)
   final double doseTotalDiaria;
-
-  @HiveField(6)
   final double doseBasal;
-
-  @HiveField(7)
   final TipoInsulinaBasal tipoInsulinaBasal;
-
-  @HiveField(8)
   final List<HorarioInsulina> horariosBasal;
-
-  @HiveField(9)
   final double? doseBolus;
-
-  @HiveField(10)
   final TipoInsulinaRapida tipoInsulinaRapida;
-
-  @HiveField(11)
   final List<EscalaCorrecao> escalaCorrecao;
-
-  @HiveField(12)
   final String orientacoesDieta;
-
-  @HiveField(13)
   final String orientacoesMonitorizacao;
-
-  @HiveField(14)
   final String orientacoesHipoglicemia;
-
-  @HiveField(15)
   final String prescricaoCompleta;
 
   Prescricao({
@@ -207,6 +154,60 @@ class Prescricao extends HiveObject {
     required this.orientacoesHipoglicemia,
     required this.prescricaoCompleta,
   }) : dataPrescricao = dataPrescricao ?? DateTime.now();
+
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'paciente_id': pacienteId,
+      'data_prescricao': dataPrescricao.toIso8601String(),
+      'sensibilidade_insulinica': sensibilidadeInsulinica.name,
+      'esquema_insulina': esquemaInsulina.name,
+      'dose_total_diaria': doseTotalDiaria,
+      'dose_basal': doseBasal,
+      'tipo_insulina_basal': tipoInsulinaBasal.name,
+      'horarios_basal': jsonEncode(horariosBasal.map((h) => h.toMap()).toList()),
+      'dose_bolus': doseBolus,
+      'tipo_insulina_rapida': tipoInsulinaRapida.name,
+      'escala_correcao': jsonEncode(escalaCorrecao.map((e) => e.toMap()).toList()),
+      'orientacoes_dieta': orientacoesDieta,
+      'orientacoes_monitorizacao': orientacoesMonitorizacao,
+      'orientacoes_hipoglicemia': orientacoesHipoglicemia,
+      'prescricao_completa': prescricaoCompleta,
+    };
+  }
+
+  factory Prescricao.fromMap(Map<String, dynamic> map) {
+    return Prescricao(
+      id: map['id'],
+      pacienteId: map['paciente_id'],
+      dataPrescricao: DateTime.parse(map['data_prescricao']),
+      sensibilidadeInsulinica: SensibilidadeInsulinica.values.firstWhere(
+        (e) => e.name == map['sensibilidade_insulinica'],
+      ),
+      esquemaInsulina: EsquemaInsulina.values.firstWhere(
+        (e) => e.name == map['esquema_insulina'],
+      ),
+      doseTotalDiaria: map['dose_total_diaria'],
+      doseBasal: map['dose_basal'],
+      tipoInsulinaBasal: TipoInsulinaBasal.values.firstWhere(
+        (e) => e.name == map['tipo_insulina_basal'],
+      ),
+      horariosBasal: (jsonDecode(map['horarios_basal']) as List)
+          .map((h) => HorarioInsulina.fromMap(h))
+          .toList(),
+      doseBolus: map['dose_bolus'],
+      tipoInsulinaRapida: TipoInsulinaRapida.values.firstWhere(
+        (e) => e.name == map['tipo_insulina_rapida'],
+      ),
+      escalaCorrecao: (jsonDecode(map['escala_correcao']) as List)
+          .map((e) => EscalaCorrecao.fromMap(e))
+          .toList(),
+      orientacoesDieta: map['orientacoes_dieta'],
+      orientacoesMonitorizacao: map['orientacoes_monitorizacao'],
+      orientacoesHipoglicemia: map['orientacoes_hipoglicemia'],
+      prescricaoCompleta: map['prescricao_completa'],
+    );
+  }
 
   Prescricao copyWith({
     int? id,
