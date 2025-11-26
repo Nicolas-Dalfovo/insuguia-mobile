@@ -15,17 +15,32 @@ class PrescricaoLocalDataSource {
   // Salva uma prescrição
   Future<int> salvarPrescricao(Prescricao prescricao) async {
     final box = await _getBox();
+    print('DEBUG DataSource: Box prescricoes tem ${box.length} itens antes de salvar');
     
     // Adiciona a prescrição ao box e obtém a key
     final key = await box.add(prescricao);
+    print('DEBUG DataSource: box.add() retornou key: $key');
+    print('DEBUG DataSource: prescricao.key após add: ${prescricao.key}');
     
     // Atualiza o ID da prescrição com a chave gerada
     prescricao.id = key;
+    print('DEBUG DataSource: prescricao.id atualizado para: ${prescricao.id}');
     
     // Salva usando o método save() do HiveObject
     await prescricao.save();
+    print('DEBUG DataSource: prescricao.save() executado');
+    print('DEBUG DataSource: prescricao.key após save: ${prescricao.key}');
+    print('DEBUG DataSource: prescricao.id após save: ${prescricao.id}');
     
-    print('DEBUG: Prescrição salva com key: $key, pacienteId: ${prescricao.pacienteId}');
+    // Verificação
+    final verificacao = box.get(key);
+    if (verificacao != null) {
+      print('DEBUG DataSource: Verificação - prescrição encontrada com key $key');
+      print('DEBUG DataSource: Verificação - pacienteId: ${verificacao.pacienteId}, id: ${verificacao.id}');
+    }
+    
+    print('DEBUG DataSource: Box prescricoes tem ${box.length} itens após salvar');
+    print('DEBUG DataSource: Retornando key final: $key');
     
     return key;
   }

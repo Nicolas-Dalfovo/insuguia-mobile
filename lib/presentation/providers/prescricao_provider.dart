@@ -45,11 +45,21 @@ class PrescricaoProvider with ChangeNotifier {
 
   // Salva uma nova prescrição
   Future<int?> salvarPrescricao(Prescricao prescricao) async {
+    print('DEBUG PROVIDER: Salvando prescrição para paciente ${prescricao.pacienteId}...');
+    print('DEBUG PROVIDER: prescricao.id antes de salvar: ${prescricao.id}');
+    
     try {
       final id = await _repository.salvarPrescricao(prescricao);
+      print('DEBUG PROVIDER: Repository retornou ID: $id');
+      print('DEBUG PROVIDER: prescricao.id após salvar: ${prescricao.id}');
+      print('DEBUG PROVIDER: prescricao.key após salvar: ${prescricao.key}');
+      
       await carregarPrescricoes();
+      print('DEBUG PROVIDER: Total de prescrições após salvar: ${_prescricoes.length}');
+      
       return id;
     } catch (e) {
+      print('DEBUG PROVIDER: ERRO ao salvar prescrição: $e');
       _erro = 'Erro ao salvar prescrição: $e';
       notifyListeners();
       return null;
