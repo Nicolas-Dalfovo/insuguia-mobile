@@ -30,6 +30,7 @@ O aplicativo categoriza o paciente, avalia sua sensibilidade à insulina e, com 
 -   **Listagem de Pacientes:** Visualização de todos os pacientes cadastrados com busca por nome
 -   **Edição de Pacientes:** Atualização de dados de pacientes já cadastrados
 -   **Exclusão de Pacientes:** Remoção de pacientes do sistema com confirmação
+-   **Exportação em PDF:** Geração de PDF profissional da prescrição com compartilhamento via sistema nativo
 -   **Compatibilidade Web:** Funciona perfeitamente em navegadores web
 
 ### Em Desenvolvimento
@@ -38,7 +39,6 @@ O aplicativo categoriza o paciente, avalia sua sensibilidade à insulina e, com 
 -   Acompanhamento diário com registro de glicemias
 -   Ajuste automático de doses baseado em glicemias diárias
 -   Orientações para alta hospitalar
--   Exportação de prescrição em PDF
 
 ## Arquitetura
 
