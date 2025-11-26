@@ -39,7 +39,6 @@ O aplicativo categoriza o paciente, avalia sua sensibilidade à insulina e, com 
 
 -   Acompanhamento diário com registro de glicemias
 -   Ajuste automático de doses baseado em glicemias diárias
--   Orientações para alta hospitalar
 
 ## Arquitetura
 
