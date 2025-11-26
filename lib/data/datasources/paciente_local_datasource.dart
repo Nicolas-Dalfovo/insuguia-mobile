@@ -27,7 +27,13 @@ class PacienteLocalDataSource {
   // Busca todos os pacientes cadastrados
   Future<List<Paciente>> buscarTodosPacientes() async {
     final box = await _getBox();
-    final pacientes = box.values.toList();
+    final pacientes = box.values.map((p) {
+      // Sincroniza o id com o key do Hive
+      if (p.key != null && p.id != p.key) {
+        p.id = p.key as int;
+      }
+      return p;
+    }).toList();
     
     // Ordena por data de cadastro (mais recentes primeiro)
     pacientes.sort((a, b) => b.dataCadastro.compareTo(a.dataCadastro));
@@ -38,7 +44,11 @@ class PacienteLocalDataSource {
   // Busca um paciente por ID
   Future<Paciente?> buscarPacientePorId(int id) async {
     final box = await _getBox();
-    return box.get(id);
+    final paciente = box.get(id);
+    if (paciente != null && paciente.id != id) {
+      paciente.id = id;
+    }
+    return paciente;
   }
 
   // Atualiza os dados de um paciente
