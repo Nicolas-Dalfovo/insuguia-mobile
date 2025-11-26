@@ -5,6 +5,7 @@ import '../providers/paciente_provider.dart';
 import 'cadastro_paciente_screen.dart';
 import 'dados_clinicos_screen.dart';
 import 'editar_paciente_screen.dart';
+import 'historico_prescricoes_screen.dart';
 
 // Tela para listar todos os pacientes cadastrados
 class ListaPacientesScreen extends StatefulWidget {
@@ -65,6 +66,15 @@ class _ListaPacientesScreenState extends State<ListaPacientesScreen> {
       context,
       MaterialPageRoute(
         builder: (context) => DadosClinicosScreen(paciente: paciente),
+      ),
+    );
+  }
+
+  void _verHistorico(Paciente paciente) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => HistoricoPrescricoesScreen(paciente: paciente),
       ),
     );
   }
@@ -274,6 +284,16 @@ class _ListaPacientesScreenState extends State<ListaPacientesScreen> {
                         ),
                       ),
                       const PopupMenuItem(
+                        value: 'historico',
+                        child: Row(
+                          children: [
+                            Icon(Icons.history),
+                            SizedBox(width: 8),
+                            Text('Histórico'),
+                          ],
+                        ),
+                      ),
+                      const PopupMenuItem(
                         value: 'editar',
                         child: Row(
                           children: [
@@ -300,6 +320,8 @@ class _ListaPacientesScreenState extends State<ListaPacientesScreen> {
                     onSelected: (value) {
                       if (value == 'prescrever') {
                         _selecionarPaciente(paciente);
+                      } else if (value == 'historico') {
+                        _verHistorico(paciente);
                       } else if (value == 'editar') {
                         _editarPaciente(paciente);
                       } else if (value == 'excluir') {

@@ -1,5 +1,6 @@
 import 'package:hive_flutter/hive_flutter.dart';
 import '../../domain/entities/paciente.dart';
+import '../../domain/entities/prescricao.dart';
 
 // Helper para gerenciar o Hive (banco de dados local compatível com Web)
 class HiveHelper {
@@ -19,6 +20,21 @@ class HiveHelper {
       // Registra os adaptadores
       if (!Hive.isAdapterRegistered(0)) {
         Hive.registerAdapter(PacienteAdapter());
+      }
+      if (!Hive.isAdapterRegistered(1)) {
+        Hive.registerAdapter(TipoInsulinaBasalAdapter());
+      }
+      if (!Hive.isAdapterRegistered(2)) {
+        Hive.registerAdapter(TipoInsulinaRapidaAdapter());
+      }
+      if (!Hive.isAdapterRegistered(3)) {
+        Hive.registerAdapter(HorarioInsulinaAdapter());
+      }
+      if (!Hive.isAdapterRegistered(4)) {
+        Hive.registerAdapter(EscalaCorrecaoAdapter());
+      }
+      if (!Hive.isAdapterRegistered(5)) {
+        Hive.registerAdapter(PrescricaoAdapter());
       }
       
       _initialized = true;

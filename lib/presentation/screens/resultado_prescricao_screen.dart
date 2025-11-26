@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 import '../../domain/entities/dados_clinicos.dart';
 import '../../domain/entities/paciente.dart';
 import '../../domain/entities/prescricao.dart';
@@ -8,6 +9,7 @@ import '../../domain/usecases/classificar_sensibilidade_insulinica.dart';
 import '../../domain/usecases/determinar_esquema_insulina.dart';
 import '../../domain/usecases/gerar_prescricao.dart';
 import '../../core/services/pdf_service.dart';
+import '../providers/prescricao_provider.dart';
 import '../screens/home_screen.dart';
 
 class ResultadoPrescricaoScreen extends StatefulWidget {
@@ -105,6 +107,17 @@ class _ResultadoPrescricaoScreenState extends State<ResultadoPrescricaoScreen> {
       dadosClinicos: widget.dadosClinicos,
       prescricao: _prescricao,
     );
+
+    // Atualiza a prescrição com o texto completo
+    _prescricao = _prescricao.copyWith(prescricaoCompleta: _prescricaoTexto);
+
+    // Salva a prescrição no banco
+    _salvarPrescricao();
+  }
+
+  Future<void> _salvarPrescricao() async {
+    final provider = Provider.of<PrescricaoProvider>(context, listen: false);
+    await provider.salvarPrescricao(_prescricao);
   }
 
   void _copiarPrescricao() {

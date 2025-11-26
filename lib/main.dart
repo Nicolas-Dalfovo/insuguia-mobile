@@ -2,7 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'core/themes/app_theme.dart';
 import 'data/database/hive_helper.dart';
+import 'data/datasources/paciente_local_datasource.dart';
+import 'data/datasources/prescricao_local_datasource.dart';
+import 'data/repositories/paciente_repository.dart';
+import 'data/repositories/prescricao_repository.dart';
 import 'presentation/providers/paciente_provider.dart';
+import 'presentation/providers/prescricao_provider.dart';
 import 'presentation/screens/home_screen.dart';
 
 // Ponto de entrada da aplicação
@@ -24,7 +29,18 @@ class InsuGuiaApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => PacienteProvider()),
+        ChangeNotifierProvider(
+          create: (_) => PacienteProvider(
+            repository: PacienteRepository(
+              localDataSource: PacienteLocalDataSource(),
+            ),
+          ),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => PrescricaoProvider(
+            PrescricaoRepository(PrescricaoLocalDataSource()),
+          ),
+        ),
       ],
       child: MaterialApp(
         title: 'InsuGuia Mobile',

@@ -1,8 +1,15 @@
+import 'package:hive/hive.dart';
 import 'dados_clinicos.dart';
 
+part 'prescricao.g.dart';
+
+@HiveType(typeId: 1)
 enum TipoInsulinaBasal {
+  @HiveField(0)
   nph,
+  @HiveField(1)
   glargina,
+  @HiveField(2)
   degludeca;
 
   String get descricao {
@@ -27,10 +34,15 @@ enum TipoInsulinaBasal {
   }
 }
 
+@HiveType(typeId: 2)
 enum TipoInsulinaRapida {
+  @HiveField(0)
   regular,
+  @HiveField(1)
   aspart,
+  @HiveField(2)
   glulisina,
+  @HiveField(3)
   lispro;
 
   String get descricao {
@@ -58,8 +70,12 @@ enum TipoInsulinaRapida {
   }
 }
 
+@HiveType(typeId: 3)
 class HorarioInsulina {
+  @HiveField(0)
   final String horario;
+  
+  @HiveField(1)
   final double dose;
 
   HorarioInsulina({
@@ -82,9 +98,15 @@ class HorarioInsulina {
   }
 }
 
+@HiveType(typeId: 4)
 class EscalaCorrecao {
+  @HiveField(0)
   final double glicemiaInicio;
+  
+  @HiveField(1)
   final double glicemiaFim;
+  
+  @HiveField(2)
   final double dose;
 
   EscalaCorrecao({
@@ -117,22 +139,54 @@ class EscalaCorrecao {
   }
 }
 
-class Prescricao {
-  final int? id;
+@HiveType(typeId: 5)
+class Prescricao extends HiveObject {
+  @HiveField(0)
+  int? id;
+
+  @HiveField(1)
   final int pacienteId;
+
+  @HiveField(2)
   final DateTime dataPrescricao;
+
+  @HiveField(3)
   final SensibilidadeInsulinica sensibilidadeInsulinica;
+
+  @HiveField(4)
   final EsquemaInsulina esquemaInsulina;
+
+  @HiveField(5)
   final double doseTotalDiaria;
+
+  @HiveField(6)
   final double doseBasal;
+
+  @HiveField(7)
   final TipoInsulinaBasal tipoInsulinaBasal;
+
+  @HiveField(8)
   final List<HorarioInsulina> horariosBasal;
+
+  @HiveField(9)
   final double? doseBolus;
+
+  @HiveField(10)
   final TipoInsulinaRapida tipoInsulinaRapida;
+
+  @HiveField(11)
   final List<EscalaCorrecao> escalaCorrecao;
+
+  @HiveField(12)
   final String orientacoesDieta;
+
+  @HiveField(13)
   final String orientacoesMonitorizacao;
+
+  @HiveField(14)
   final String orientacoesHipoglicemia;
+
+  @HiveField(15)
   final String prescricaoCompleta;
 
   Prescricao({
