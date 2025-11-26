@@ -73,10 +73,20 @@ O aplicativo foi desenvolvido utilizando a arquitetura **Clean Architecture**, s
 
 3.  **Execute o aplicativo:**
 
-    **Para Web:**
+    **IMPORTANTE PARA WEB:** Para que os dados persistam no navegador, é necessário executar com uma porta fixa.
+
+    **Para Web (Opção 1 - VS Code - Recomendado):**
+    - O projeto já está configurado para usar a porta 5555 automaticamente
+    - Abra o projeto no VS Code
+    - Pressione F5 ou clique em "Run > Start Debugging"
+    - Os dados serão persistidos entre sessões
+
+    **Para Web (Opção 2 - Linha de comando):**
     ```bash
-    flutter run -d chrome
+    flutter run -d chrome --web-port 5555
     ```
+    
+    **Nota:** Em modo debug, o Flutter executa o Chrome com porta aleatória, o que impede a persistência de dados. A porta fixa resolve isso.
 
     **Para Android/iOS:**
     ```bash
