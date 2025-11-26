@@ -34,9 +34,11 @@ class _HistoricoPrescricoesScreenState
   Future<void> _carregarPrescricoes() async {
     setState(() => _isLoading = true);
 
+    print('DEBUG: Carregando prescrições para paciente ID: ${widget.paciente.id}');
     final provider = Provider.of<PrescricaoProvider>(context, listen: false);
     final prescricoes =
         await provider.carregarPrescricoesPorPaciente(widget.paciente.id!);
+    print('DEBUG: Prescrições encontradas: ${prescricoes.length}');
 
     setState(() {
       _prescricoes = prescricoes;

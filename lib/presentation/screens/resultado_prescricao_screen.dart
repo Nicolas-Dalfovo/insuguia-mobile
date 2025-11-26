@@ -116,8 +116,14 @@ class _ResultadoPrescricaoScreenState extends State<ResultadoPrescricaoScreen> {
   }
 
   Future<void> _salvarPrescricao() async {
-    final provider = Provider.of<PrescricaoProvider>(context, listen: false);
-    await provider.salvarPrescricao(_prescricao);
+    try {
+      print('DEBUG: Salvando prescrição para paciente ID: ${_prescricao.pacienteId}');
+      final provider = Provider.of<PrescricaoProvider>(context, listen: false);
+      final id = await provider.salvarPrescricao(_prescricao);
+      print('DEBUG: Prescrição salva com ID: $id');
+    } catch (e) {
+      print('DEBUG: Erro ao salvar prescrição: $e');
+    }
   }
 
   void _copiarPrescricao() {

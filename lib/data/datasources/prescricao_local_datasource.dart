@@ -31,9 +31,17 @@ class PrescricaoLocalDataSource {
   // Busca todas as prescrições de um paciente
   Future<List<Prescricao>> buscarPrescricoesPorPaciente(int pacienteId) async {
     final box = await _getBox();
+    print('DEBUG DataSource: Total de prescrições no banco: ${box.length}');
+    print('DEBUG DataSource: Buscando prescrições para pacienteId: $pacienteId');
+    
     final prescricoes = box.values
-        .where((p) => p.pacienteId == pacienteId)
+        .where((p) {
+          print('DEBUG DataSource: Prescrição com pacienteId: ${p.pacienteId}');
+          return p.pacienteId == pacienteId;
+        })
         .toList();
+    
+    print('DEBUG DataSource: Prescrições encontradas: ${prescricoes.length}');
     
     // Ordena por data (mais recente primeiro)
     prescricoes.sort((a, b) => b.dataPrescricao.compareTo(a.dataPrescricao));
