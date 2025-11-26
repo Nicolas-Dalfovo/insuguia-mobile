@@ -42,7 +42,7 @@ class Paciente {
       'tfg': tfg,
       'localInternacao': localInternacao,
       'dataCadastro': dataCadastro.toIso8601String(),
-      'ativo': ativo,
+      'ativo': ativo ? 1 : 0,
     };
   }
 
@@ -60,7 +60,7 @@ class Paciente {
       tfg: json['tfg'] != null ? (json['tfg'] as num).toDouble() : null,
       localInternacao: json['localInternacao'] as String?,
       dataCadastro: DateTime.parse(json['dataCadastro'] as String),
-      ativo: json['ativo'] as bool? ?? true,
+      ativo: (json['ativo'] as int?) == 1,
     );
   }
 
