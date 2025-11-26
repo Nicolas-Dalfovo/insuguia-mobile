@@ -1,24 +1,32 @@
 import 'package:hive/hive.dart';
 import '../../domain/entities/prescricao.dart';
+import '../database/hive_helper.dart';
 
 // DataSource para operações com Prescrição no banco Hive
 class PrescricaoLocalDataSource {
   static const String _boxName = 'prescricoes';
+  final HiveHelper _hiveHelper = HiveHelper.instance;
 
   // Obtém a box de prescrições
   Future<Box<Prescricao>> _getBox() async {
-    if (!Hive.isBoxOpen(_boxName)) {
-      return await Hive.openBox<Prescricao>(_boxName);
-    }
-    return Hive.box<Prescricao>(_boxName);
+    return await _hiveHelper.openBox<Prescricao>(_boxName);
   }
 
   // Salva uma prescrição
   Future<int> salvarPrescricao(Prescricao prescricao) async {
     final box = await _getBox();
+    
+    // Adiciona a prescrição ao box e obtém a key
     final key = await box.add(prescricao);
+    
+    // Atualiza o ID da prescrição com a chave gerada
     prescricao.id = key;
+    
+    // Salva usando o método save() do HiveObject
     await prescricao.save();
+    
+    print('DEBUG: Prescrição salva com key: $key, pacienteId: ${prescricao.pacienteId}');
+    
     return key;
   }
 

@@ -29,8 +29,8 @@ class PacienteRepository {
   }
 
   // Exclui um paciente
-  Future<int> excluirPaciente(int id) async {
-    return await _localDataSource.excluirPaciente(id);
+  Future<void> excluirPaciente(int id) async {
+    await _localDataSource.deletarPaciente(id);
   }
 
   // Busca pacientes por nome

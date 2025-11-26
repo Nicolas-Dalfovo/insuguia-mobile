@@ -12,34 +12,46 @@ class HiveHelper {
 
   // Inicializa o Hive
   Future<void> initialize() async {
-    if (_initialized) return;
+    if (_initialized) {
+      print('DEBUG: Hive já inicializado');
+      return;
+    }
     
     try {
+      print('DEBUG: Inicializando Hive...');
       await Hive.initFlutter();
       
+      print('DEBUG: Registrando adaptadores...');
       // Registra os adaptadores
       if (!Hive.isAdapterRegistered(0)) {
         Hive.registerAdapter(PacienteAdapter());
+        print('DEBUG: PacienteAdapter registrado');
       }
       if (!Hive.isAdapterRegistered(1)) {
         Hive.registerAdapter(TipoInsulinaBasalAdapter());
+        print('DEBUG: TipoInsulinaBasalAdapter registrado');
       }
       if (!Hive.isAdapterRegistered(2)) {
         Hive.registerAdapter(TipoInsulinaRapidaAdapter());
+        print('DEBUG: TipoInsulinaRapidaAdapter registrado');
       }
       if (!Hive.isAdapterRegistered(3)) {
         Hive.registerAdapter(HorarioInsulinaAdapter());
+        print('DEBUG: HorarioInsulinaAdapter registrado');
       }
       if (!Hive.isAdapterRegistered(4)) {
         Hive.registerAdapter(EscalaCorrecaoAdapter());
+        print('DEBUG: EscalaCorrecaoAdapter registrado');
       }
       if (!Hive.isAdapterRegistered(5)) {
         Hive.registerAdapter(PrescricaoAdapter());
+        print('DEBUG: PrescricaoAdapter registrado');
       }
       
       _initialized = true;
+      print('DEBUG: Hive inicializado com sucesso');
     } catch (e) {
-      print('Erro ao inicializar Hive: $e');
+      print('ERRO ao inicializar Hive: $e');
       rethrow;
     }
   }
@@ -47,14 +59,19 @@ class HiveHelper {
   // Abre uma box (equivalente a uma tabela)
   Future<Box<T>> openBox<T>(String boxName) async {
     if (!_initialized) {
+      print('DEBUG: Hive não inicializado, inicializando...');
       await initialize();
     }
     
     if (Hive.isBoxOpen(boxName)) {
+      print('DEBUG: Box $boxName já está aberta');
       return Hive.box<T>(boxName);
     }
     
-    return await Hive.openBox<T>(boxName);
+    print('DEBUG: Abrindo box $boxName...');
+    final box = await Hive.openBox<T>(boxName);
+    print('DEBUG: Box $boxName aberta com ${box.length} itens');
+    return box;
   }
 
   // Fecha todas as boxes
